@@ -1,0 +1,1 @@
+alter table public.fichajes add column lat double precision, add column lng double precision, add column precision_m double precision;

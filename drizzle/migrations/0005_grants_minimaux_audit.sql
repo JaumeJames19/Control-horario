@@ -1,0 +1,2 @@
+REVOKE ALL ON public.aceptaciones_ubicacion,public.solicitudes_correccion,public.decisiones_correccion FROM anon,authenticated; GRANT SELECT,INSERT ON public.aceptaciones_ubicacion TO authenticated; GRANT SELECT ON public.solicitudes_correccion,public.decisiones_correccion TO authenticated; GRANT ALL ON public.aceptaciones_ubicacion,public.solicitudes_correccion,public.decisiones_correccion TO service_role;
+DROP POLICY IF EXISTS perfiles_encargado ON public.profiles;

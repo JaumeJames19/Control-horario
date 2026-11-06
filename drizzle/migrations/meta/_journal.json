@@ -1,0 +1,139 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793041013642,
+      "tag": "0000_migration",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793131855008,
+      "tag": "0001_ubicacion_fichajes",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793161849407,
+      "tag": "0002_registro_inmutable_aprobaciones",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793161949686,
+      "tag": "0003_gestion_trabajadores_atomica",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793162373425,
+      "tag": "0004_endurecer_altas_y_decisiones",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793162444571,
+      "tag": "0005_grants_minimaux_audit",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793163733110,
+      "tag": "0006_sin_ubicacion_aviso_privacidad_pin",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793163900000,
+      "tag": "0007_jornada_olvidada",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793164200000,
+      "tag": "0008_arreglo_solicitud_correccion",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1793165400000,
+      "tag": "0009_calendario_ausencias_cierres_seguridad",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1793432400000,
+      "tag": "0010_cierres_empresa_vacaciones",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793440000000,
+      "tag": "0011_horarios_descansos_inspeccion_push",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1793440600000,
+      "tag": "0012_auditoria_final",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793775567232,
+      "tag": "0013_aplicar_0012_auditoria_final",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793781000000,
+      "tag": "0014_alta_autorizada",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1793781000001,
+      "tag": "0015_alta_autorizada",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1793781000002,
+      "tag": "0016_calendario_laboral_anual",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1793781000003,
+      "tag": "0017_dias_otros_anos",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1793781000004,
+      "tag": "0018_fichaje_desactivable",
+      "breakpoints": true
+    }
+  ]
+}
