@@ -18,5 +18,5 @@
 - Schedules can vary by date range (`horarios_periodo`, e.g. summer Fridays 7–15); `horarioDe()` picks the most specific period and feeds the daily theoretical hours and the missed-punch warnings.
 - Legal rests are warnings only (12 h between shifts, 7+ consecutive days) and counted for the gestoría; they never block punching.
 - `profiles.inspector` + `is_inspector()` (aal2 required) grants read-only access to everything for the Labour Inspectorate; inspectors cannot punch or decide. `fichajes.modalidad` (presencial/distancia) is set on the entrada and inherited by the session.
-- Push notifications are standard Web Push implemented with WebCrypto (Cloudflare Workers has no Node crypto); keys live in `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` secrets; `/api/avisos` is the cron endpoint and dedupes with `avisos_enviados`.
+- Push notifications are standard Web Push implemented with WebCrypto (Cloudflare Workers has no Node crypto); keys live in `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` secrets; `/api/public/avisos` is the cron endpoint and dedupes with `avisos_enviados`.
 - UI strings go through `t()` in `src/lib/i18n.ts` (Spanish text is the key, Catalan is the dictionary); exports for the gestoría stay in Spanish.

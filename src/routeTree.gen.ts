@@ -10,17 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ApiAvisosRouteImport } from './routes/api/avisos'
 import { Route as ApiPublicAvisosRouteImport } from './routes/api/public/avisos'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAvisosRoute = ApiAvisosRouteImport.update({
-  id: '/api/avisos',
-  path: '/api/avisos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicAvisosRoute = ApiPublicAvisosRouteImport.update({
@@ -31,31 +25,27 @@ const ApiPublicAvisosRoute = ApiPublicAvisosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/api/avisos': typeof ApiAvisosRoute
   '/api/public/avisos': typeof ApiPublicAvisosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/api/avisos': typeof ApiAvisosRoute
   '/api/public/avisos': typeof ApiPublicAvisosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/api/avisos': typeof ApiAvisosRoute
   '/api/public/avisos': typeof ApiPublicAvisosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/avisos' | '/api/public/avisos'
+  fullPaths: '/' | '/api/public/avisos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/avisos' | '/api/public/avisos'
-  id: '__root__' | '/' | '/api/avisos' | '/api/public/avisos'
+  to: '/' | '/api/public/avisos'
+  id: '__root__' | '/' | '/api/public/avisos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ApiAvisosRoute: typeof ApiAvisosRoute
   ApiPublicAvisosRoute: typeof ApiPublicAvisosRoute
 }
 
@@ -66,13 +56,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/avisos': {
-      id: '/api/avisos'
-      path: '/api/avisos'
-      fullPath: '/api/avisos'
-      preLoaderRoute: typeof ApiAvisosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/avisos': {
@@ -87,7 +70,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ApiAvisosRoute: ApiAvisosRoute,
   ApiPublicAvisosRoute: ApiPublicAvisosRoute,
 }
 export const routeTree = rootRouteImport
