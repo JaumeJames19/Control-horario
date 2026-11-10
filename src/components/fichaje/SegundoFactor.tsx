@@ -53,7 +53,7 @@ export function SegundoFactor({ onDone }: { onDone: () => void }) {
             <p className="text-sm">{t("Como encargado, además del PIN necesitas un código que cambia cada 30 segundos. Escanea este QR con Google Authenticator, Microsoft Authenticator o la app de contraseñas del iPhone:")}</p>
             <img src={qr} alt="Código QR para la app de autenticación" className="mx-auto h-48 w-48 rounded-lg bg-white p-2" />
             {secreto && <p className="break-all text-xs text-muted-foreground">{t("Si no puedes escanearlo, introduce esta clave:")} {secreto}</p>}
-            <p role="alert" className="rounded-xl bg-pause-soft p-3 text-sm text-pause">{t("Hazlo ahora: hasta que actives el código, cualquiera que sepa tu PIN podría registrar su propia app de autenticación.")}</p>
+            <p className="rounded-xl bg-pause-soft p-3 text-sm text-pause">{t("Hazlo ahora: hasta que actives el código, cualquiera que sepa tu PIN podría registrar su propia app de autenticación.")}</p>
           </>
         ) : (
           <p className="text-sm">{t("Escribe el código de 6 números que muestra tu app de autenticación.")}</p>

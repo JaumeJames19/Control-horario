@@ -266,8 +266,8 @@ export function FichajeApp({ uid }: { uid: string }) {
         ))}
       </nav>}
 
-      {yo && !yo.activo && <p role="alert" className="text-destructive">{t("Tu cuenta está desactivada. Habla con el encargado.")}</p>}
-      {fichaje && unclosedGroups.length > 0 && <section className="rounded-2xl bg-pause-soft p-4 text-pause ring-1 ring-pause/30" role="alert"><b>{t("Jornadas sin cerrar: no suman horas")}</b>{unclosedGroups.map(({ p, dia }) => <p key={p.id + dia}>{admin ? p.nombre + " · " : ""}{dia} · {t("Solicita una corrección si falta la salida.")}</p>)}</section>}
+      {yo && !yo.activo && <p className="text-destructive">{t("Tu cuenta está desactivada. Habla con el encargado.")}</p>}
+      {fichaje && unclosedGroups.length > 0 && <section className="rounded-2xl bg-pause-soft p-4 text-pause ring-1 ring-pause/30"><b>{t("Jornadas sin cerrar: no suman horas")}</b>{unclosedGroups.map(({ p, dia }) => <p key={p.id + dia}>{admin ? p.nombre + " · " : ""}{dia} · {t("Solicita una corrección si falta la salida.")}</p>)}</section>}
       {tab === "fichar" && (
         <>
           <section className="relative flex flex-col items-center gap-1 overflow-hidden rounded-3xl bg-card px-4 pb-6 pt-5 text-center shadow-card">
@@ -287,7 +287,7 @@ export function FichajeApp({ uid }: { uid: string }) {
           )}
           <section className="flex flex-col gap-3">
             {olvidada && (
-              <div role="alert" className="flex flex-col gap-2 rounded-3xl bg-pause-soft p-5 text-center text-pause ring-1 ring-pause/30">
+              <div className="flex flex-col gap-2 rounded-3xl bg-pause-soft p-5 text-center text-pause ring-1 ring-pause/30">
                 <b>{t("Te olvidaste de fichar la salida del")} {new Date(hoy[0]!.dia + "T12:00").toLocaleDateString(locale(), { weekday: "long", day: "numeric", month: "long" })}.</b>
                 <span className="text-sm">{t("Para volver a fichar, solicita la corrección con tu hora real de salida. El encargado la aprobará.")}</span>
                 <Button onClick={() => setEditor({ uid, dia: hoy[0]!.dia, filas: hoy })}>{t("Solicitar corrección")}</Button>

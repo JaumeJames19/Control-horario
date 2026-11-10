@@ -10,7 +10,7 @@
   "public/manifest.webmanifest": "d0ae80fe4a3762a0",
   "src/components/fichaje/Marca.tsx": "59cc0ed506b246af",
   "src/components/fichaje/Login.tsx": "a4fac52fcd544b6f",
-  "src/styles.css": "1769c8c940fb9ada",
+  "src/styles.css": "fcf848d5c119e928",
   "src/components/fichaje/Ausencias.test.tsx": "708d5af8b3a616d1",
   "src/lib/jornada.test.ts": "ba83fee70d755dde",
   "drizzle/migrations/0009_calendario_ausencias_cierres_seguridad.sql": "a9a2bb956b9cd48e",

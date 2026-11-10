@@ -198,7 +198,7 @@ function HorasPlantilla({ year, mes, plantilla, cfg, festSet, cierres, suyas }: 
         })}
       </div>
       {plantilla.some((p) => horasLaborables(rango.ano[0], rango.ano[1], cfg, festSet, cierres, suyas(p.id)).horas > cfg.horas_anuales) && (
-        <p role="alert" className="rounded-xl bg-stop-soft p-2 text-sm text-stop">{tf("En rojo y con ⚠, quien supera el máximo anual del convenio ({n} h). El horario de apertura no puede ser la jornada de cada trabajador: habrá que repartirlo por turnos.", { n: h1(cfg.horas_anuales) })}</p>
+        <p className="rounded-xl bg-stop-soft p-2 text-sm text-stop">{tf("En rojo y con ⚠, quien supera el máximo anual del convenio ({n} h). El horario de apertura no puede ser la jornada de cada trabajador: habrá que repartirlo por turnos.", { n: h1(cfg.horas_anuales) })}</p>
       )}
       <p className="text-xs text-muted-foreground">{t("Los sábados van por turnos: cuentan en el total de la empresa, pero aún no en las horas de cada trabajador.")}</p>
     </div>
