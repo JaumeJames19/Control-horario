@@ -22,13 +22,18 @@ CREATE FUNCTION tests.como(_uid uuid, _aal text DEFAULT 'aal1') RETURNS void LAN
 GRANT EXECUTE ON FUNCTION tests.como(uuid, text) TO authenticated;
 
 -- Datos: un trabajador, una encargada y una inspectora (las altas pasan por altas_autorizadas, como en la app).
-INSERT INTO altas_autorizadas(email) VALUES ('ana@fichaje.local'), ('jefa@fichaje.local'), ('ines@fichaje.local');
+INSERT INTO altas_autorizadas(email) VALUES ('ana@fichaje.local'), ('jefa@fichaje.local'), ('ines@fichaje.local'), ('pepe@fichaje.local');
 INSERT INTO auth.users(id, email) VALUES
   ('00000000-0000-0000-0000-00000000000a', 'ana@fichaje.local'),
   ('00000000-0000-0000-0000-00000000000b', 'jefa@fichaje.local'),
-  ('00000000-0000-0000-0000-00000000000c', 'ines@fichaje.local');
+  ('00000000-0000-0000-0000-00000000000c', 'ines@fichaje.local'),
+  ('00000000-0000-0000-0000-00000000000d', 'pepe@fichaje.local');
 INSERT INTO user_roles(user_id, role) VALUES ('00000000-0000-0000-0000-00000000000b', 'admin');
 UPDATE profiles SET inspector = true WHERE id = '00000000-0000-0000-0000-00000000000c';
+-- Pepe dejó una jornada abierta hace 20 horas (se inserta sin disparadores para poder poner la hora).
+SET session_replication_role = replica;
+INSERT INTO fichajes(user_id, tipo, dia, at) VALUES ('00000000-0000-0000-0000-00000000000d', 'entrada', (now() - interval '20 hours')::date, now() - interval '20 hours');
+SET session_replication_role = origin;
 UPDATE config_jornada SET fichaje_activo = true, ip_kiosco = '{198.51.100.7}' WHERE id = 1;
 
 -- 1. Nadie se da de alta solo.
@@ -45,6 +50,11 @@ SELECT tests.falla($$INSERT INTO fichajes(user_id, tipo, dia) VALUES (auth.uid()
 SELECT tests.falla($$INSERT INTO fichajes(user_id, tipo, dia) VALUES (auth.uid(), 'espera', '2000-01-01')$$, 'Solo conductores');
 SELECT tests.falla($$UPDATE fichajes SET tipo = 'salida' WHERE user_id = auth.uid()$$, '');
 SELECT tests.falla($$DELETE FROM fichajes WHERE user_id = auth.uid()$$, '');
+
+-- Una jornada abierta hace más de 16 horas no se cierra fichando.
+SELECT tests.como('00000000-0000-0000-0000-00000000000d');
+SELECT tests.falla($$INSERT INTO fichajes(user_id, tipo, dia) VALUES (auth.uid(), 'salida', '2000-01-01')$$, 'Jornada anterior sin cerrar');
+SELECT tests.como('00000000-0000-0000-0000-00000000000a');
 
 -- 3. Vacaciones: no se puede pedir más saldo del que hay, pero un periodo corto sí.
 SELECT tests.falla($$SELECT solicitar_ausencia(auth.uid(), 'vacaciones', '2028-01-03', '2028-03-31', null)$$, 'No quedan suficientes días');
@@ -68,7 +78,7 @@ DO $$ BEGIN ASSERT is_manager(), 'Con aal2 debe ser encargada'; END $$;
 SELECT tests.como('00000000-0000-0000-0000-00000000000c', 'aal2');
 SELECT tests.falla($$INSERT INTO fichajes(user_id, tipo, dia) VALUES (auth.uid(), 'entrada', '2000-01-01')$$, 'La Inspección no ficha');
 SELECT tests.falla($$SELECT solicitar_ausencia(auth.uid(), 'vacaciones', '2028-05-08', '2028-05-08', null)$$, 'La Inspección solo consulta');
-DO $$ BEGIN ASSERT (SELECT count(*) FROM fichajes) = 1, 'La Inspección debe ver los fichajes de todos'; END $$;
+DO $$ BEGIN ASSERT (SELECT count(*) FROM fichajes) = 2, 'La Inspección debe ver los fichajes de todos'; END $$;
 
 -- 7. Un trabajador no ve los datos de otro.
 SELECT tests.como('00000000-0000-0000-0000-00000000000c');

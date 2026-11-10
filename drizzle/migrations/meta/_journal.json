@@ -141,6 +141,13 @@
       "when": 1793781000005,
       "tag": "0019_limite_ip_sin_tableta",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1793781000006,
+      "tag": "0020_fichar_una_lectura",
+      "breakpoints": true
     }
   ]
 }
