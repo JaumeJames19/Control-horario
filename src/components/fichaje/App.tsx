@@ -257,6 +257,7 @@ export function FichajeApp({ uid }: { uid: string }) {
       </div>
     </Marca>
     <main className="mx-auto flex max-w-[560px] flex-col gap-5 px-4 pb-12 pt-5">
+      <h1 className="sr-only">{t("Registro de jornada")}</h1>
       {tabs.length > 1 && <nav className="grid grid-flow-col auto-cols-fr gap-1 rounded-2xl bg-secondary p-1">
         {tabs.map((k) => (
           <button type="button" key={k} aria-current={tab === k ? "page" : undefined} onClick={() => setTab(k)}
