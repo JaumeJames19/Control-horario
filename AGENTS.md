@@ -4,7 +4,7 @@
 - Team management is manager-authorized; role provisioning is an explicit out-of-band operation, never signup-trigger bootstrap.
 - The database assigns timestamps and session dates in Europe/Madrid; all screens and exports consume the same effective timeline to preserve overnight shifts.
 - PIN resets run in a server function that checks the caller's admin role before using the admin client; why: only the encargado may change other users' credentials.
-- Logins go through the `entrar` server function (5 failed PINs in 15 min per user, 20 per IP = locked, every attempt logged in `accesos` and purged after 90 days); why: rate-limit and audit PIN guessing.
+- Logins go through the `entrar` server function (5 failed PINs in 15 min per user, 20 per IP = locked except the tablet IPs in `config_jornada.ip_kiosco`, which share the warehouse IP, every attempt logged in `accesos` and purged after 90 days); why: rate-limit and audit PIN guessing.
 - The real Auth password is HMAC(`PIN_PEPPER`, id:PIN), never the PIN; `PIN_PEPPER_PREVIOUS` lets the pepper rotate (logins that validate with the old one are re-saved with the new one); why: brute force must go through the app's lockout, and a key rotation must not lock everyone out.
 - `is_manager()` requires an aal2 session: the encargado must pass TOTP 2FA (`SegundoFactor`) before any manager action.
 - Hours follow the Barcelona construction-materials commerce agreement: paid break of 20 min (>5 h) / 10 min (≤5 h) is credited from real pauses; overtime is weekly vs theoretical schedule (config_jornada + festivos + ausencias), 150 % on Sundays, holidays, Saturday ≥14 h and 22–06 h. Keep parameters configurable: the agreement expires 31-12-2026.
