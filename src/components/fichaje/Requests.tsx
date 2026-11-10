@@ -33,7 +33,7 @@ export function Requests({ admin, perfiles, revision, onSaved }: { admin: boolea
     <div className="flex gap-2"><Button variant={pendingOnly ? "default" : "outline"} onClick={() => setPendingOnly(true)}>{t("Pendientes")}</Button><Button variant={!pendingOnly ? "default" : "outline"} onClick={() => setPendingOnly(false)}>{t("Todas")}</Button></div>
     {!requests.length && <p className="text-sm text-muted-foreground">{t("Sin solicitudes.")}</p>}
     {requests.filter((s) => !pendingOnly || pendiente(s)).map((s) => { const d = s.decisiones_correccion; const proposal = s.propuesta as { original_id: string | null; tipo: Tipo; at: string | null; anular: boolean }[];
-      return <article key={s.id} className="flex flex-col gap-2 rounded-2xl bg-card p-4 shadow-card">
+      return <article key={s.id} className="flex flex-col gap-2 rounded-lg bg-card p-4 shadow-card">
         <b>{perfiles.find((p) => p.id === s.user_id)?.nombre ?? t("Mi jornada")} · {d ? d.aprobada ? t("Aprobada") : t("Rechazada") : t("Pendiente")}</b>
         <p className="text-sm">{s.motivo}</p><p className="text-xs text-muted-foreground">{t("Solicitada por")} {perfiles.find((p) => p.id === s.solicitada_por)?.nombre ?? s.solicitada_por} · {localInput(s.solicitada_at).replace("T", " ")}</p>
         {proposal.map((p, i) => <p key={i} className="break-all text-sm">{p.anular ? t("Anulación") : `${t(TIPOS[p.tipo])}: ${p.at ? localInput(p.at).replace("T", " ") : "—"}`} · {t("Original:")} {p.original_id ?? t("fichaje omitido")}</p>)}

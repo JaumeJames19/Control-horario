@@ -91,9 +91,9 @@ export function Ajustes({ cfg, festivos, cierres, periodos, onSaved }: { cfg: Cf
   const faltaCalendario = new Date().getMonth() >= 10 && !festivos.some((f) => f.fecha.startsWith(String(siguiente)));
 
   return (
-    <section className="flex flex-col gap-4 rounded-3xl bg-card p-5 shadow-card">
+    <section className="flex flex-col gap-4 rounded-xl bg-card p-5 shadow-card">
       <h2 className="font-display text-2xl font-bold">{t("Ajustes")}</h2>
-      <div className={`flex flex-col gap-2 rounded-2xl p-4 ${cfg.fichaje_activo ? "bg-go-soft" : "bg-secondary"}`}>
+      <div className={`flex flex-col gap-2 rounded-lg p-4 ${cfg.fichaje_activo ? "bg-go-soft" : "bg-secondary"}`}>
         <b>{cfg.fichaje_activo ? t("Fichaje activado") : t("Fichaje desactivado: la app se usa solo para vacaciones")}</b>
         <p className="text-sm text-muted-foreground">{t("Mientras esté desactivado nadie puede fichar (tampoco en la tablet), los trabajadores solo ven Vacaciones y no se envían recordatorios de fichaje.")}</p>
         <Button variant="outline" className="self-start" onClick={() => setConfirmar({ texto: cfg.fichaje_activo ? t("¿Desactivar el fichaje?") : t("¿Activar el fichaje para toda la plantilla?"), accion: () => void fichajeActivo(!cfg.fichaje_activo), boton: cfg.fichaje_activo ? t("Sí, desactivar") : t("Sí, activar"), detalle: t("Se puede volver a cambiar en cualquier momento.") })}>{cfg.fichaje_activo ? t("Desactivar fichaje") : t("Activar fichaje")}</Button>

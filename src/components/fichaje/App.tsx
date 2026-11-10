@@ -240,7 +240,7 @@ export function FichajeApp({ uid }: { uid: string }) {
   const resumenDe = (id: string) => resumenes.get(id)?.mes ?? resumenMes(mes, [], cfg, festSet, []);
   const anualDe = (id: string) => resumenes.get(id)?.anual ?? 0;
   const vacacionesDe = (id: string) => resumenes.get(id)?.vacaciones;
-  const card = "flex flex-col gap-3 rounded-3xl bg-card p-5 shadow-card";
+  const card = "flex flex-col gap-3 rounded-xl bg-card p-5 shadow-card";
   const h = "font-display text-2xl font-bold tracking-tight";
 
   if (yo?.debe_cambiar_pin) return <CambiarPin nombre={yo.nombre} onDone={() => { toast.success(t("PIN cambiado")); void cargarPerfiles(); }} />;
@@ -259,18 +259,18 @@ export function FichajeApp({ uid }: { uid: string }) {
     </Marca>
     <main className="mx-auto flex max-w-[560px] flex-col gap-5 px-4 pb-12 pt-5">
       <h1 id="titulo-app" ref={enfocarAlMontar} tabIndex={-1} className="sr-only">{t("Registro de jornada")}</h1>
-      {tabs.length > 1 && <nav className="grid grid-flow-col auto-cols-fr gap-1 rounded-2xl bg-secondary p-1">
+      {tabs.length > 1 && <nav className="grid grid-flow-col auto-cols-fr gap-1 rounded-lg bg-secondary p-1">
         {tabs.map((k) => (
           <button type="button" key={k} aria-current={tab === k ? "page" : undefined} onClick={() => setTab(k)}
-            className={`rounded-xl py-2 text-[15px] font-semibold capitalize transition-all focus-visible:outline-2 focus-visible:outline-ring ${tab === k ? "bg-card text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}>{t(k)}</button>
+            className={`rounded-md py-2 text-[15px] font-semibold capitalize transition-all focus-visible:outline-2 focus-visible:outline-ring ${tab === k ? "bg-card text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}>{t(k)}</button>
         ))}
       </nav>}
 
       {yo && !yo.activo && <p className="text-destructive">{t("Tu cuenta está desactivada. Habla con el encargado.")}</p>}
-      {fichaje && unclosedGroups.length > 0 && <section className="rounded-2xl bg-pause-soft p-4 text-pause ring-1 ring-pause/30"><b>{t("Jornadas sin cerrar: no suman horas")}</b>{unclosedGroups.map(({ p, dia }) => <p key={p.id + dia}>{admin ? p.nombre + " · " : ""}{dia} · {t("Solicita una corrección si falta la salida.")}</p>)}</section>}
+      {fichaje && unclosedGroups.length > 0 && <section className="rounded-lg bg-pause-soft p-4 text-pause ring-1 ring-pause/30"><b>{t("Jornadas sin cerrar: no suman horas")}</b>{unclosedGroups.map(({ p, dia }) => <p key={p.id + dia}>{admin ? p.nombre + " · " : ""}{dia} · {t("Solicita una corrección si falta la salida.")}</p>)}</section>}
       {tab === "fichar" && (
         <>
-          <section className="relative flex flex-col items-center gap-1 overflow-hidden rounded-3xl bg-card px-4 pb-6 pt-5 text-center shadow-card">
+          <section className="relative flex flex-col items-center gap-1 overflow-hidden rounded-xl bg-card px-4 pb-6 pt-5 text-center shadow-card">
             <div aria-hidden className="slashes pointer-events-none absolute -right-8 -top-8 h-24 w-24 rotate-12 rounded-[22px] bg-brand" />
             <div className="relative text-sm font-semibold uppercase tracking-[0.14em] text-muted-foreground">{fecha}</div>
             <div className="num relative font-display text-[clamp(64px,22vw,112px)] font-bold leading-none tracking-tight">
@@ -281,13 +281,13 @@ export function FichajeApp({ uid }: { uid: string }) {
             </div>
           </section>
           {misAvisos.length > 0 && !olvidada && (
-            <section role="status" className="rounded-2xl bg-pause-soft p-4 text-pause ring-1 ring-pause/30">
+            <section role="status" className="rounded-lg bg-pause-soft p-4 text-pause ring-1 ring-pause/30">
               {misAvisos.map((a) => <p key={a}>{t(a)}</p>)}
             </section>
           )}
           <section className="flex flex-col gap-3">
             {olvidada && (
-              <div className="flex flex-col gap-2 rounded-3xl bg-pause-soft p-5 text-center text-pause ring-1 ring-pause/30">
+              <div className="flex flex-col gap-2 rounded-xl bg-pause-soft p-5 text-center text-pause ring-1 ring-pause/30">
                 <b>{t("Te olvidaste de fichar la salida del")} {new Date(hoy[0]!.dia + "T12:00").toLocaleDateString(locale(), { weekday: "long", day: "numeric", month: "long" })}.</b>
                 <span className="text-sm">{t("Para volver a fichar, solicita la corrección con tu hora real de salida. El encargado la aprobará.")}</span>
                 <Button onClick={() => setEditor({ uid, dia: hoy[0]!.dia, filas: hoy })}>{t("Solicitar corrección")}</Button>
@@ -297,25 +297,25 @@ export function FichajeApp({ uid }: { uid: string }) {
               <label className="flex items-center gap-2 self-center text-sm text-muted-foreground"><input type="checkbox" checked={distancia} onChange={(e) => setDistancia(e.target.checked)} /> {t("Hoy trabajo a distancia")}</label>
             )}
             {!olvidada && state === "fuera" && (
-              <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("entrada")} className="flex min-h-[128px] flex-col items-center justify-center slashes rounded-[28px] border-0 bg-go shadow-pop hover:bg-go hover:text-on-signal hover:brightness-105 font-display text-5xl font-bold tracking-tight text-on-signal active:scale-[.98] disabled:opacity-60">
+              <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("entrada")} className="flex min-h-[128px] flex-col items-center justify-center slashes rounded-2xl border-0 bg-go shadow-pop hover:bg-go hover:text-on-signal hover:brightness-105 font-display text-5xl font-bold tracking-tight text-on-signal active:scale-[.98] disabled:opacity-60">
                 {t("Entrada")}<small className="font-sans text-base font-medium tracking-normal opacity-90">{hoy.length ? t("Empezar otra jornada") : t("Empezar la jornada")}</small>
               </Button>
             )}
             {!olvidada && state === "trabajando" && (
               <>
-                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("salida")} className="flex min-h-[128px] flex-col items-center justify-center slashes rounded-[28px] border-0 bg-stop shadow-pop hover:bg-stop hover:text-on-signal hover:brightness-105 font-display text-5xl font-bold tracking-tight text-on-signal active:scale-[.98] disabled:opacity-60">
+                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("salida")} className="flex min-h-[128px] flex-col items-center justify-center slashes rounded-2xl border-0 bg-stop shadow-pop hover:bg-stop hover:text-on-signal hover:brightness-105 font-display text-5xl font-bold tracking-tight text-on-signal active:scale-[.98] disabled:opacity-60">
                   {t("Salida")}<small className="font-sans text-base font-medium tracking-normal opacity-90">{t("Terminar la jornada")}</small>
                 </Button>
-                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("pausa")} className="min-h-14 rounded-2xl border-0 bg-card text-lg text-pause shadow-card ring-2 ring-inset ring-pause/70 hover:bg-pause-soft hover:text-pause">{t("Hacer pausa")}</Button>
-                {yo?.conductor && <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("espera")} className="min-h-14 rounded-2xl border-0 bg-card text-lg text-foreground shadow-card ring-2 ring-inset ring-foreground/70 hover:bg-muted">{t("Espera (carga, descarga, obra)")}</Button>}
+                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("pausa")} className="min-h-14 rounded-lg border-0 bg-card text-lg text-pause shadow-card ring-2 ring-inset ring-pause/70 hover:bg-pause-soft hover:text-pause">{t("Hacer pausa")}</Button>
+                {yo?.conductor && <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("espera")} className="min-h-14 rounded-lg border-0 bg-card text-lg text-foreground shadow-card ring-2 ring-inset ring-foreground/70 hover:bg-muted">{t("Espera (carga, descarga, obra)")}</Button>}
               </>
             )}
             {!olvidada && (state === "pausa" || state === "espera") && (
               <>
-                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("reanudar")} className="flex min-h-[128px] flex-col items-center justify-center slashes rounded-[28px] border-0 bg-pause shadow-pop hover:bg-pause hover:text-on-signal hover:brightness-105 font-display text-5xl font-bold tracking-tight text-on-signal active:scale-[.98] disabled:opacity-60">
+                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("reanudar")} className="flex min-h-[128px] flex-col items-center justify-center slashes rounded-2xl border-0 bg-pause shadow-pop hover:bg-pause hover:text-on-signal hover:brightness-105 font-display text-5xl font-bold tracking-tight text-on-signal active:scale-[.98] disabled:opacity-60">
                   {t("Volver")}<small className="font-sans text-base font-medium tracking-normal opacity-90">{state === "espera" ? t("Terminar la espera") : t("Terminar la pausa")}</small>
                 </Button>
-                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("salida")} className="min-h-14 rounded-2xl border-0 bg-card text-lg text-stop shadow-card ring-2 ring-inset ring-stop/70 hover:bg-stop-soft hover:text-stop">{t("Salida")}</Button>
+                <Button variant="outline" disabled={busy || !privacyReady || !yo?.activo} onClick={() => fichar("salida")} className="min-h-14 rounded-lg border-0 bg-card text-lg text-stop shadow-card ring-2 ring-inset ring-stop/70 hover:bg-stop-soft hover:text-stop">{t("Salida")}</Button>
               </>
             )}
           </section>
@@ -349,7 +349,7 @@ export function FichajeApp({ uid }: { uid: string }) {
               const rP = resumenDe(p.id);
               return (
                 <li key={p.id} className="py-2">
-                  <Button variant="ghost" aria-expanded={open} onClick={() => setAbierto(open ? null : p.id)} className="flex h-auto w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left whitespace-normal">
+                  <Button variant="ghost" aria-expanded={open} onClick={() => setAbierto(open ? null : p.id)} className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left whitespace-normal">
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold">{p.nombre}{!p.activo && <span className="ml-2 text-xs text-stop">{t("baja")}</span>}</div>
                       <div className="text-sm text-muted-foreground">{groupByDay(fs).length} {t("días")} · {dur(rP.trabajado)} {t("de")} {dur(rP.teorico)} {t("previstas")}{rP.extra75 + rP.extra150 > 0 ? ` · ${horas(rP.extra75 + rP.extra150)} h extra` : ""}{rP.descansos ? ` · ${t("Descansos incumplidos:")} ${rP.descansos}` : ""}</div>
@@ -404,7 +404,7 @@ export function FichajeApp({ uid }: { uid: string }) {
                 const cP = cierres.find((c) => c.user_id === p.id && c.mes === mes);
                 return (
                   <li key={p.id} className="py-2">
-                    <Button variant="ghost" aria-expanded={open} onClick={() => setAbierto(open ? null : p.id)} className="flex h-auto w-full items-center gap-3 rounded-2xl px-3 py-2.5 text-left whitespace-normal">
+                    <Button variant="ghost" aria-expanded={open} onClick={() => setAbierto(open ? null : p.id)} className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left whitespace-normal">
                       <div className="min-w-0 flex-1">
                         <div className="font-semibold">{p.nombre}{!p.activo && <span className="ml-2 text-xs text-stop">{t("desactivado")}</span>}
                           {st !== "fuera" && <span className={`ml-2 rounded-full px-2 py-0.5 text-xs font-medium ${st === "trabajando" ? "bg-go-soft text-go" : "bg-pause-soft text-pause"}`}>{st === "trabajando" ? t("trabajando") : st === "pausa" ? t("en pausa") : t("en espera")}</span>}

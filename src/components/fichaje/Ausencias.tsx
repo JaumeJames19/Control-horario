@@ -86,10 +86,10 @@ export function Ausencias({ uid, admin, perfiles, cfg, festivos, cierres, ausenc
   const proximas = ausencias.filter((a) => a.estado === "aprobada" && a.hasta >= hoy).sort((a, b) => a.desde.localeCompare(b.desde));
   const mias = ausencias.filter((a) => a.user_id === uid);
   const field = "campo px-3 py-2";
-  const card = "flex flex-col gap-3 rounded-3xl bg-card p-5 shadow-card";
+  const card = "flex flex-col gap-3 rounded-xl bg-card p-5 shadow-card";
   const cifra = (n: number, t: string, destacar = false) => (
-    <div className={`flex flex-col rounded-2xl p-3 ${destacar ? (n < 0 ? "bg-stop-soft text-stop" : "bg-go-soft text-go") : "bg-secondary"}`}>
-      <b className="num font-display text-3xl leading-none">{n}</b><span className="mt-1 text-xs">{t}</span>
+    <div className={`flex flex-col px-2 py-3 ${destacar ? (n < 0 ? "bg-stop-soft text-stop" : "bg-go-soft text-go") : ""}`}>
+      <b className="num font-display text-4xl leading-none">{n}</b><span className="mt-1.5 text-xs leading-tight">{t}</span>
     </div>
   );
   const laborablesDe = (a: AusenciaRow) => a.tipo === "vacaciones" ? `${diasVacacionesSolicitud(a.desde, a.hasta, festSet, cierres)} ${t("laborables")}` : `${diasEntre(a.desde, a.hasta).length} ${t("días")}`;
@@ -109,7 +109,7 @@ export function Ausencias({ uid, admin, perfiles, cfg, festivos, cierres, ausenc
             <select className={field} value={para} onChange={(e) => setPara(e.target.value)}>{perfiles.filter((p) => p.activo || p.id === para).map((p) => <option key={p.id} value={p.id}>{p.nombre}</option>)}</select>
           </label>
         )}
-        <div className="grid grid-cols-4 gap-2 text-center">
+        <div className="grid grid-cols-4 divide-x divide-border overflow-hidden rounded-lg text-center ring-1 ring-border">
           {cifra(saldo.total, t("al año"))}
           {cifra(saldo.empresa, t("cierre empresa"))}
           {cifra(saldo.aprobadas + saldo.pendientes, saldo.pendientes ? `${t("pedidos")} (${saldo.pendientes} ${t("pend.")})` : t("pedidos"))}

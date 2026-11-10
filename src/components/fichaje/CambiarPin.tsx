@@ -44,7 +44,7 @@ export function CambiarPin({ nombre, voluntario = false, onDone, onCancel }: { n
         <h1 ref={enfocarAlMontar} tabIndex={-1} className="outline-none font-display text-3xl font-bold">{voluntario ? t("Cambiar mi PIN") : t("Elige tu PIN")}</h1>
         <p className="text-sm text-muted-foreground">{voluntario ? t("Elige un PIN nuevo de 6 números que solo sepas tú.") : <>{nombre ? `${nombre}, ${t("el")}` : t("El")} {t("PIN que te han dado es temporal. Pon uno nuevo que solo sepas tú.")}</>}</p>
       </div>
-      <form onSubmit={submit} className="flex flex-col gap-3 rounded-3xl bg-card p-6 shadow-card">
+      <form onSubmit={submit} className="flex flex-col gap-3 rounded-xl bg-card p-6 shadow-card">
         <label className="flex flex-col gap-1.5 text-sm font-medium">{t("PIN nuevo")}
           <input className={field} inputMode="numeric" type="password" autoComplete="new-password" value={pin} onChange={(e) => setPin(solo(e.target.value))} />
         </label>

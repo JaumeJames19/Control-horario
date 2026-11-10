@@ -57,7 +57,7 @@ export function AvisosPush({ admin }: { admin: boolean }) {
   if (estado === "sin-clave") return admin ? <p className="text-xs text-muted-foreground">Avisos push: faltan las claves VAPID en el servidor (VAPID_PUBLIC_KEY y VAPID_PRIVATE_KEY).</p> : null;
   const ios = typeof navigator !== "undefined" && /iPhone|iPad/.test(navigator.userAgent);
   return (
-    <section className="flex flex-col gap-2 rounded-3xl bg-card p-5 shadow-card">
+    <section className="flex flex-col gap-2 rounded-xl bg-card p-5 shadow-card">
       <h2 className="font-display text-2xl font-bold tracking-tight">{t("Avisos en el móvil")}</h2>
       {estado === "no-soporta" ? (
         <p className="text-sm text-muted-foreground">{ios ? t("En iPhone, añade la app a la pantalla de inicio (Compartir → Añadir a pantalla de inicio) y ábrela desde ahí para poder activar los avisos.") : t("Este navegador no admite notificaciones.")}</p>
