@@ -102,6 +102,13 @@ Requisitos: Node.js 22 o superior (o [Bun](https://bun.sh)) y un proyecto de Sup
    npm run lint     # linter
    ```
 
+## Cómo se actualiza
+
+Este repositorio se genera automáticamente a partir de la versión en uso real con
+un script que quita los datos de la empresa (`.publicar.json` lleva el registro de la
+última publicación). No se edita a mano: los cambios hechos aquí se perderían en la
+siguiente publicación.
+
 ## Licencia y uso
 
 Código publicado como muestra de portfolio. Si quieres reutilizarlo en tu empresa, revisa antes que las reglas de cálculo coinciden con tu convenio colectivo.
