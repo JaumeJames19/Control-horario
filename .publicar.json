@@ -1,0 +1,18 @@
+{
+  "README.md": "addeafba5222583d",
+  "AGENTS.md": "36859d0ed840d749",
+  "roadmap.md": "f82365309339c6c9",
+  ".gitignore": "74366d54bcd8375f",
+  "public/apple-touch-icon.png": "c343196f8659745e",
+  "public/favicon.ico": "891b508896dddf39",
+  "public/icon-192.png": "577592db39fa4c52",
+  "public/icon-512.png": "70b2f27e7ee9daff",
+  "public/manifest.webmanifest": "d0ae80fe4a3762a0",
+  "src/components/fichaje/Marca.tsx": "59cc0ed506b246af",
+  "src/components/fichaje/Login.tsx": "a4fac52fcd544b6f",
+  "src/styles.css": "8e17a12e3ab4778f",
+  "src/components/fichaje/Ausencias.test.tsx": "708d5af8b3a616d1",
+  "src/lib/jornada.test.ts": "ba83fee70d755dde",
+  "drizzle/migrations/0009_calendario_ausencias_cierres_seguridad.sql": "a9a2bb956b9cd48e",
+  "drizzle/migrations/0016_calendario_laboral_anual.sql": "a40c4e9c2fea01c0"
+}

@@ -117,7 +117,8 @@ export const fichaKiosco = createServerFn({ method: "POST" })
         if (error || !f) throw new Error(error?.message.includes("sin cerrar") ? "OLVIDADA" : "NO_FICHADO");
         hecho = { tipo: data.tipo, at: f.at };
       }
-      const { data: filas } = await yo.rpc("list_punches", { _uid: session.user.id });
+      // Basta con lo reciente (jornada abierta o la última); sin fecha llegaría todo el histórico y Supabase lo corta a 1.000 filas.
+      const { data: filas } = await yo.rpc("list_punches", { _uid: session.user.id, _desde: new Date(Date.now() - 45 * 86400000).toISOString().slice(0, 10) });
       const ev = ((filas ?? []) as unknown as { tipo: Tipo; at: string; dia: string }[]).map((f) => ({ tipo: f.tipo, at: new Date(f.at).getTime(), dia: f.dia }));
       const ultimo = ev[ev.length - 1];
       const sesion = ultimo ? ev.filter((e) => e.dia === ultimo.dia) : [];

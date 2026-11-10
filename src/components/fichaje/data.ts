@@ -2,6 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Evento, Tipo } from "@/lib/fichaje";
 import { cierresComoAusencias, type Config, type Ausencia, type Cierre, type Periodo } from "@/lib/jornada";
 import type { Database } from "@/integrations/supabase/types";
+import { todas } from "@/lib/paginar";
 
 export type Fila = { id: string; user_id: string; tipo: Tipo; at: string; dia: string; lugar: string; editado: boolean; original_at: string | null; original_id: string | null; modalidad?: string };
 export type Perfil = { id: string; username: string; nombre: string; activo: boolean; debe_cambiar_pin: boolean; conductor: boolean; inspector: boolean };
@@ -16,9 +17,9 @@ export function monthRange(ym: string) {
 
 /** Fichajes efectivos (de un trabajador o de todos) desde el día indicado; sin `desde`, todo el histórico. */
 export async function loadAll(userId?: string, desde?: string) {
-  const { data, error } = await supabase.rpc("list_punches", { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) });
-  if (error) throw error;
-  return (data ?? []) as unknown as Fila[];
+  // shortcut: páginas por posición sin ORDER BY; un fichaje nuevo entre dos páginas puede desplazar una fila. Si molesta, ordenar en list_punches.
+  const args = { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) };
+  return (await todas((a, b) => supabase.rpc("list_punches", args).range(a, b))) as unknown as Fila[];
 }
 
 export async function loadMonth(ym: string, userId?: string) {
