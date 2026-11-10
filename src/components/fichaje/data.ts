@@ -17,9 +17,10 @@ export function monthRange(ym: string) {
 
 /** Fichajes efectivos (de un trabajador o de todos) desde el día indicado; sin `desde`, todo el histórico. */
 export async function loadAll(userId?: string, desde?: string) {
-  // shortcut: páginas por posición sin ORDER BY; un fichaje nuevo entre dos páginas puede desplazar una fila. Si molesta, ordenar en list_punches.
   const args = { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) };
-  return (await todas((a, b) => supabase.rpc("list_punches", args).range(a, b))) as unknown as Fila[];
+  const filas = (await todas((a, b) => supabase.rpc("list_punches", args).range(a, b))) as unknown as Fila[];
+  // list_punches va ordenado; si alguien ficha entre dos páginas, la fila del borde puede llegar dos veces.
+  return [...new Map(filas.map((f) => [f.id, f])).values()];
 }
 
 export async function loadMonth(ym: string, userId?: string) {

@@ -80,6 +80,9 @@ SELECT tests.falla($$INSERT INTO fichajes(user_id, tipo, dia) VALUES (auth.uid()
 SELECT tests.falla($$SELECT solicitar_ausencia(auth.uid(), 'vacaciones', '2028-05-08', '2028-05-08', null)$$, 'La Inspección solo consulta');
 DO $$ BEGIN ASSERT (SELECT count(*) FROM fichajes) = 2, 'La Inspección debe ver los fichajes de todos'; END $$;
 
+-- list_punches sale ordenado por trabajador y hora (la app lo lee por páginas).
+DO $$ BEGIN ASSERT (SELECT array_agg(x->>'user_id' ORDER BY n) FROM list_punches() WITH ORDINALITY t(x, n)) = ARRAY['00000000-0000-0000-0000-00000000000a', '00000000-0000-0000-0000-00000000000d'], 'list_punches debe salir ordenado'; END $$;
+
 -- 7. Un trabajador no ve los datos de otro.
 SELECT tests.como('00000000-0000-0000-0000-00000000000c');
 DO $$ BEGIN ASSERT (SELECT count(*) FROM fichajes) = 0, 'Sin aal2 la Inspección no ve nada ajeno'; END $$;
