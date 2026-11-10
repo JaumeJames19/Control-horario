@@ -35,11 +35,14 @@ export function Kiosco() {
   useIdioma();
 
   const limpiar = () => { setUsuario(""); setPin(""); setEstado(null); };
+  // La pantalla se limpia sola (tablet compartida), pero cada toque o tecla vuelve a dar el tiempo completo:
+  // así quien va más despacio (lector de pantalla, poca soltura con la pantalla táctil) no se queda a medias.
+  const [actividad, setActividad] = useState(0);
   useEffect(() => {
     if (!estado) return;
     const t = setTimeout(limpiar, estado.hecho ? 4000 : 20000);
     return () => clearTimeout(t);
-  }, [estado]);
+  }, [estado, actividad]);
 
   async function enviar(tipo?: Tipo) {
     setBusy(true); setMsg("");
@@ -74,7 +77,7 @@ export function Kiosco() {
             <Button disabled={busy || !usuario || pin.length !== 6} className="h-auto rounded-2xl py-4 text-2xl">{busy ? "…" : t("Continuar")}</Button>
           </form>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4" onPointerDown={() => setActividad((n) => n + 1)} onKeyDown={() => setActividad((n) => n + 1)}>
             <h1 ref={estado.hecho ? undefined : (resultado as React.RefObject<HTMLHeadingElement>)} tabIndex={-1} className="font-display text-5xl font-bold tracking-tight outline-none">{estado.nombre}</h1>
             {estado.hecho ? (
               <p ref={resultado as React.RefObject<HTMLParagraphElement>} role="status" tabIndex={-1} className="outline-none rounded-3xl bg-go-soft p-6 text-2xl font-semibold text-go ring-1 ring-go/30">{t(TIPOS[estado.hecho.tipo])} {t("registrada a las")} {hm(estado.hecho.at)}.</p>

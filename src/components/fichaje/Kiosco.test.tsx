@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import { Kiosco } from "./Kiosco";
 
 const llamar = vi.fn();
@@ -31,5 +31,27 @@ describe("tableta: accesible para lectores de pantalla", () => {
     const estado = await screen.findByRole("status");
     expect(estado).toHaveTextContent("Entrada registrada a las");
     expect(estado).toHaveFocus();
+  });
+});
+
+describe("tableta: tiempo para elegir", () => {
+  it("cada toque vuelve a dar los 20 segundos; sin tocar, se limpia", async () => {
+    vi.useFakeTimers();
+    try {
+      llamar.mockResolvedValueOnce({ nombre: "Ana Demo", estado: "fuera", olvidada: false, opciones: ["entrada"], hecho: null });
+      render(<Kiosco />);
+      entrar();
+      await act(async () => { await Promise.resolve(); });
+      const nombre = screen.getByRole("heading", { name: "Ana Demo" });
+      act(() => { vi.advanceTimersByTime(15000); });
+      fireEvent.pointerDown(nombre);
+      act(() => { vi.advanceTimersByTime(15000); });
+      expect(screen.getByRole("heading", { name: "Ana Demo" })).toBeInTheDocument();
+      act(() => { vi.advanceTimersByTime(6000); });
+      expect(screen.queryByRole("heading", { name: "Ana Demo" })).not.toBeInTheDocument();
+      expect(screen.getByLabelText("Usuario")).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

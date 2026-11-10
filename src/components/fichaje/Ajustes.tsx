@@ -116,7 +116,7 @@ export function Ajustes({ cfg, festivos, cierres, periodos, onSaved }: { cfg: Cf
       </form>
       <p className="text-sm">{t("Tablet del almacén: abre")} <a className="font-semibold text-brand underline" href={kiosco}>{kiosco}</a> {t("en la tablet y añádela a la pantalla de inicio.")}</p>
 
-      {faltaCalendario && <p role="alert" className="rounded-xl bg-pause-soft p-3 text-sm text-pause">{tf("El año {n} aún no tiene festivos: añádelos (y los cierres de empresa y horarios especiales) antes de enero para que el horario teórico y los avisos sean correctos.", { n: siguiente })}</p>}
+      {faltaCalendario && <p className="rounded-xl bg-pause-soft p-3 text-sm text-pause">{tf("El año {n} aún no tiene festivos: añádelos (y los cierres de empresa y horarios especiales) antes de enero para que el horario teórico y los avisos sean correctos.", { n: siguiente })}</p>}
       <div className="flex flex-col gap-2">
         <h3 className="font-display text-xl font-bold">{t("Festivos")}</h3>
         {anos.map((a) => (

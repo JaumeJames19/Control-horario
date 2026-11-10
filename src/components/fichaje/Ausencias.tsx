@@ -163,7 +163,7 @@ export function Ausencias({ uid, admin, perfiles, cfg, festivos, cierres, ausenc
                 <b>{nombre(a.user_id)} · {t(TIPOS_AUS[a.tipo] ?? a.tipo)}</b>
                 <span className="text-sm">{fecha(a.desde)} – {fecha(a.hasta)} ({laborablesDe(a)}){a.motivo ? ` · ${a.motivo}` : ""}</span>
                 {exceso.length > 0 && (
-                  <p role="alert" className="rounded-xl bg-pause-soft p-2 text-sm text-pause">{t("Personal mínimo: si la apruebas faltarían más de")} {cfg.max_ausentes} {t("el")} {exceso.map((x, i) => <span key={x.dia}>{i ? ", " : ""}{fecha(x.dia)} ({x.ausentes.map(nombre).join(", ")})</span>)}.</p>
+                  <p className="rounded-xl bg-pause-soft p-2 text-sm text-pause">{t("Personal mínimo: si la apruebas faltarían más de")} {cfg.max_ausentes} {t("el")} {exceso.map((x, i) => <span key={x.dia}>{i ? ", " : ""}{fecha(x.dia)} ({x.ausentes.map(nombre).join(", ")})</span>)}.</p>
                 )}
                 {a.tipo === "vacaciones" && <span className="text-xs text-muted-foreground">{t("Pedida el")} {new Date(a.solicitada_at).toLocaleDateString(locale())} · {t("con esta,")} {nombre(a.user_id)} {t("tendría")} {s.disponibles} {t("días a elegir en")} {a.desde.slice(0, 4)}.</span>}
                 <input className={field} placeholder={t("Motivo (obligatorio para rechazar)")} value={razon[a.id] ?? ""} onChange={(e) => setRazon({ ...razon, [a.id]: e.target.value })} />

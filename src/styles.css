@@ -155,3 +155,8 @@
   /* :focus-within también: en un campo de fecha, con el foco en el icono del calendario, :focus no se cumple. */
   &:focus, &:focus-within { border-color: var(--color-ring); box-shadow: 0 0 0 4px color-mix(in oklch, var(--color-ring) 18%, transparent); }
 }
+
+/* Quien pide menos movimiento en su sistema no ve animaciones ni transiciones (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
