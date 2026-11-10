@@ -2,6 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Evento, Tipo } from "@/lib/fichaje";
 import { cierresComoAusencias, type Config, type Ausencia, type Cierre, type Periodo } from "@/lib/jornada";
 import type { Database } from "@/integrations/supabase/types";
+import { todas } from "@/lib/paginar";
 
 export type Fila = { id: string; user_id: string; tipo: Tipo; at: string; dia: string; lugar: string; editado: boolean; original_at: string | null; original_id: string | null; modalidad?: string };
 export type Perfil = { id: string; username: string; nombre: string; activo: boolean; debe_cambiar_pin: boolean; conductor: boolean; inspector: boolean };
@@ -16,9 +17,10 @@ export function monthRange(ym: string) {
 
 /** Fichajes efectivos (de un trabajador o de todos) desde el día indicado; sin `desde`, todo el histórico. */
 export async function loadAll(userId?: string, desde?: string) {
-  const { data, error } = await supabase.rpc("list_punches", { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) });
-  if (error) throw error;
-  return (data ?? []) as unknown as Fila[];
+  const args = { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) };
+  const filas = (await todas((a, b) => supabase.rpc("list_punches", args).range(a, b))) as unknown as Fila[];
+  // list_punches va ordenado; si alguien ficha entre dos páginas, la fila del borde puede llegar dos veces.
+  return [...new Map(filas.map((f) => [f.id, f])).values()];
 }
 
 export async function loadMonth(ym: string, userId?: string) {
@@ -76,6 +78,17 @@ export async function loadCalendario() {
     : { ...CFG_DEFECTO, periodos };
   return { cfg, festivos: (f.data ?? []) as Festivo[], ausencias: (a.data ?? []) as AusenciaRow[], cierres: (k.data ?? []) as CierreRow[], cierresEmpresa: (e.data ?? []) as CierreEmpresaRow[], periodos: (h.data ?? []) as PeriodoRow[], ajustes: (v.data ?? []) as AjusteRow[] };
 }
+
+export type SolicitudRow = Database["public"]["Tables"]["solicitudes_correccion"]["Row"] & { decisiones_correccion: Database["public"]["Tables"]["decisiones_correccion"]["Row"] | null };
+
+/** Solicitudes de corrección (las más nuevas primero) con su decisión en la misma fila; sin decisión = pendiente. */
+export function loadSolicitudes(userId?: string) {
+  return todas<SolicitudRow>((a, b) => {
+    const q = supabase.from("solicitudes_correccion").select("*, decisiones_correccion(*)").order("solicitada_at", { ascending: false }).order("id");
+    return (userId ? q.eq("user_id", userId) : q).range(a, b);
+  });
+}
+export const pendiente = (s: SolicitudRow) => !s.decisiones_correccion;
 
 /** Ausencias de un trabajador a efectos de cálculo: las suyas más los cierres de empresa, que son vacaciones para todos. */
 export const ausDe = (aus: AusenciaRow[], userId: string, cierres: Cierre[] = []): Ausencia[] => [...aus.filter((a) => a.user_id === userId), ...cierresComoAusencias(cierres)];

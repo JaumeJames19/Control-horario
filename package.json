@@ -11,6 +11,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:sql": "scripts/test-sql.sh",
     "test:watch": "vitest"
   },
   "overrides": {

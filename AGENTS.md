@@ -4,7 +4,7 @@
 - Team management is manager-authorized; role provisioning is an explicit out-of-band operation, never signup-trigger bootstrap.
 - The database assigns timestamps and session dates in Europe/Madrid; all screens and exports consume the same effective timeline to preserve overnight shifts.
 - PIN resets run in a server function that checks the caller's admin role before using the admin client; why: only the encargado may change other users' credentials.
-- Logins go through the `entrar` server function (5 failed PINs in 15 min per user, 20 per IP = locked, every attempt logged in `accesos` and purged after 90 days); why: rate-limit and audit PIN guessing.
+- Logins go through the `entrar` server function (5 failed PINs in 15 min per user, 20 per IP = locked except the tablet IPs in `config_jornada.ip_kiosco`, which share the warehouse IP, every attempt logged in `accesos` and purged after 90 days); why: rate-limit and audit PIN guessing.
 - The real Auth password is HMAC(`PIN_PEPPER`, id:PIN), never the PIN; `PIN_PEPPER_PREVIOUS` lets the pepper rotate (logins that validate with the old one are re-saved with the new one); why: brute force must go through the app's lockout, and a key rotation must not lock everyone out.
 - `is_manager()` requires an aal2 session: the encargado must pass TOTP 2FA (`SegundoFactor`) before any manager action.
 - Hours follow the Barcelona construction-materials commerce agreement: paid break of 20 min (>5 h) / 10 min (≤5 h) is credited from real pauses; overtime is weekly vs theoretical schedule (config_jornada + festivos + ausencias), 150 % on Sundays, holidays, Saturday ≥14 h and 22–06 h. Keep parameters configurable: the agreement expires 31-12-2026.
@@ -18,5 +18,5 @@
 - Schedules can vary by date range (`horarios_periodo`, e.g. summer Fridays 7–15); `horarioDe()` picks the most specific period and feeds the daily theoretical hours and the missed-punch warnings.
 - Legal rests are warnings only (12 h between shifts, 7+ consecutive days) and counted for the gestoría; they never block punching.
 - `profiles.inspector` + `is_inspector()` (aal2 required) grants read-only access to everything for the Labour Inspectorate; inspectors cannot punch or decide. `fichajes.modalidad` (presencial/distancia) is set on the entrada and inherited by the session.
-- Push notifications are standard Web Push implemented with WebCrypto (Cloudflare Workers has no Node crypto); keys live in `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` secrets; `/api/avisos` is the cron endpoint and dedupes with `avisos_enviados`.
+- Push notifications are standard Web Push implemented with WebCrypto (Cloudflare Workers has no Node crypto); keys live in `VAPID_PUBLIC_KEY`/`VAPID_PRIVATE_KEY` secrets; `/api/public/avisos` is the cron endpoint and dedupes with `avisos_enviados`.
 - UI strings go through `t()` in `src/lib/i18n.ts` (Spanish text is the key, Catalan is the dictionary); exports for the gestoría stay in Spanish.

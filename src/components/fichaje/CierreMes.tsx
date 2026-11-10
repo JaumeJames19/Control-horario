@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { compute, localInput } from "@/lib/fichaje";
-import { groupByDay, toEv, type CierreRow, type Fila } from "./data";
+import { groupByDay, loadSolicitudes, pendiente, toEv, type CierreRow, type Fila } from "./data";
 import { locale, t, tf, useIdioma } from "@/lib/i18n";
 
 const nombreMes = (ym: string) => new Date(ym + "-15T12:00").toLocaleDateString(locale(), { month: "long", year: "numeric" });
@@ -25,9 +25,7 @@ export function CierreMes({ uid, mes, mesActual, cierres, filas, revision, onSav
   useEffect(() => {
     if (!abierto) return;
     (async () => {
-      const [s, d] = await Promise.all([supabase.from("solicitudes_correccion").select("id").eq("user_id", uid), supabase.from("decisiones_correccion").select("solicitud_id")]);
-      const decididas = new Set((d.data ?? []).map((x) => x.solicitud_id));
-      setPendientes((s.data ?? []).filter((x) => !decididas.has(x.id)).length);
+      setPendientes((await loadSolicitudes(uid).catch(() => [])).filter(pendiente).length);
     })();
   }, [uid, abierto, revision]);
 
