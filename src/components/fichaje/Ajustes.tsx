@@ -136,7 +136,7 @@ export function Ajustes({ cfg, festivos, cierres, periodos, onSaved }: { cfg: Cf
                 <span className="flex flex-col">
                   <span className="num flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 shrink-0 rounded-sm ${COLOR_TIPO[tipoFestivo(f.tipo)]}`} />{fechaCorta(f.fecha)} · {f.nombre} <span className="text-muted-foreground">({t(TIPOS_FESTIVO[tipoFestivo(f.tipo)])})</span></span>
                   {f.provisional && <span className="text-xs font-semibold text-pause">{t("Pendiente de confirmación oficial")}</span>}
-                  {dowDe(f.fecha) === 6 && <span className="text-xs text-muted-foreground">{c.compensar_sabados ? t("Cae en sábado: se compensa con un puente") : t("Cae en sábado: posible día de compensación")}</span>}
+                  {dowDe(f.fecha) === 6 && c.compensar_sabados && <span className="text-xs text-muted-foreground">{t("Cae en sábado: se compensa con un puente")}</span>}
                 </span>
                 <span className="flex gap-2">
                   {f.provisional && <Button variant="outline" onClick={() => festivo({ fecha: f.fecha, nombre: f.nombre, tipo: tipoFestivo(f.tipo), provisional: false }, false)}>{t("Confirmar")}</Button>}

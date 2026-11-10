@@ -125,12 +125,10 @@ export function Ausencias({ uid, admin, perfiles, cfg, festivos, cierres, ausenc
         {provisionales.map((f) => (
           <p key={f.fecha} role="note" className="rounded-xl bg-pause-soft p-2 text-sm text-pause">{fechaLarga(f.fecha)} · {f.nombre}: {t("festivo local pendiente de confirmación oficial; la fecha puede cambiar.")}</p>
         ))}
-        {sabados.length > 0 && (
+        {sabados.length > 0 && saldo.compensados > 0 && (
           <p className="text-sm text-muted-foreground">
             {tf("Festivos que caen en sábado: {n}.", { n: sabados.map(fechaLarga).join(", ") })}{" "}
-            {saldo.compensados > 0
-              ? tf("Se compensan cubriendo {n} días de puente, que no restan vacaciones.", { n: saldo.compensados })
-              : t("Son posibles días de compensación, pendientes de confirmar con la gestoría: de momento los puentes restan vacaciones.")}
+            {tf("Se compensan cubriendo {n} días de puente, que no restan vacaciones.", { n: saldo.compensados })}
           </p>
         )}
         <CalendarioAnual year={year} festivos={festivos} cierres={cierres} ausencias={suyas} hoy={hoy} periodos={cfg.periodos} />

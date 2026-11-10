@@ -34,11 +34,10 @@ export function marcasDelAno(year: number, festivos: FestivoCal[], cierres: Cier
   return m;
 }
 
-/** Notas de un día festivo: local pendiente de confirmación oficial o festivo en sábado (posible compensación). */
+/** Notas de un día festivo: local pendiente de confirmación oficial. */
 export function notasFestivo(f: FestivoCal) {
   const out: string[] = [];
   if (f.provisional) out.push("pendiente de confirmación oficial");
-  if (dowDe(f.fecha) === 6) out.push("cae en sábado: posible día de compensación");
   return out;
 }
 

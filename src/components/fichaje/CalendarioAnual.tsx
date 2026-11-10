@@ -10,14 +10,13 @@ const FORMA: Record<Marca, string> = { nacional: "rounded-[3px]", autonomico: "r
 
 /**
  * Los doce meses del año de un vistazo: festivos (nacional, autonómico y local, con los locales provisionales
- * resaltados), cierre de la empresa y vacaciones del trabajador. Los festivos en sábado llevan un punto: posible compensación.
+ * resaltados), cierre de la empresa y vacaciones del trabajador.
  */
 export function CalendarioAnual({ year, festivos, cierres, ausencias, hoy, periodos = [] }: { year: number; festivos: FestivoCal[]; cierres: Cierre[]; ausencias: Ausencia[]; hoy: string; periodos?: Periodo[] }) {
   const marcas = marcasDelAno(year, festivos, cierres, ausencias);
   const porFecha = new Map(festivos.map((f) => [f.fecha, f]));
   const delAno = festivos.filter((f) => f.fecha.startsWith(String(year)));
   const hayProvisional = delAno.some((f) => f.provisional);
-  const haySabado = delAno.some((f) => dowDe(f.fecha) === 6);
   const apertura = sabadosApertura(year, periodos, new Set(festivos.map((f) => f.fecha)), cierres);
   useIdioma();
   return (
@@ -45,7 +44,6 @@ export function CalendarioAnual({ year, festivos, cierres, ausencias, hoy, perio
                       <span aria-hidden>{Number(d.slice(-2))}</span>
                       {/* El title no se ve en el móvil ni lo leen bien los lectores de pantalla: el mismo texto, oculto. */}
                       <span className="sr-only">{titulo}</span>
-                      {fest && dowDe(d) === 6 && <i aria-hidden className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-on-signal" />}
                     </span>
                   );
                 })}
@@ -58,7 +56,6 @@ export function CalendarioAnual({ year, festivos, cierres, ausencias, hoy, perio
         {LEYENDA.map((k) => <li key={k} className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 ${ESTILO[k]} ${FORMA[k]}`} />{t(NOMBRE[k])}</li>)}
         {apertura.size > 0 && <li className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 rounded-sm ${SABADO_APERTURA}`} />{t("Sábado de apertura")}</li>}
         {hayProvisional && <li className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 rounded-sm ${PROVISIONAL}`} />{t("Local pendiente de confirmación oficial")}</li>}
-        {haySabado && <li className="flex items-center gap-1.5"><i aria-hidden className="relative inline-block h-3 w-3 rounded-sm bg-brand"><i className="absolute right-0.5 top-0.5 h-1 w-1 rounded-full bg-on-signal" /></i>{t("Festivo en sábado: posible compensación")}</li>}
       </ul>
     </div>
   );
