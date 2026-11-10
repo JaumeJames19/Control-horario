@@ -45,7 +45,7 @@ export function VacacionesPlantilla({ year, hoy, perfiles, cfg, festivos, cierre
   }
 
   return (
-    <section className="flex flex-col gap-4 rounded-3xl bg-card p-5 shadow-card">
+    <section className="flex flex-col gap-4 rounded-xl bg-card p-5 shadow-card">
       <h2 className="font-display text-2xl font-bold">{t("Vacaciones de la plantilla")} {year}</h2>
 
       <div className="flex items-center justify-between gap-2">
@@ -176,7 +176,7 @@ function HorasPlantilla({ year, mes, plantilla, cfg, festSet, cierres, suyas }: 
   return (
     <div className="flex flex-col gap-3">
       <h3 className="font-display text-xl font-bold">{t("Horas laborables")}</h3>
-      <div className="grid gap-3 rounded-2xl bg-secondary p-3 sm:grid-cols-2">
+      <div className="grid gap-3 rounded-lg bg-secondary p-3 sm:grid-cols-2">
         {fila(`${t(MESES[mes] ?? "")} ${year}`, delMes)}
         {fila(tf("Año {a}", { a: year }), ano)}
       </div>

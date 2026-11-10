@@ -49,7 +49,7 @@ export function CierreMes({ uid, mes, mesActual, cierres, filas, revision, onSav
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl bg-stop-soft/60 p-4 ring-1 ring-brand/25">
+    <div className="flex flex-col gap-2 rounded-lg bg-stop-soft/60 p-4 ring-1 ring-brand/25">
       <b>{t("Revisa tus horas de")} {nombreMes(mes)}</b>
       <span className="text-sm">{t("Si todo está bien, da tu conformidad. Si algo no cuadra, explícalo: quedará anotado junto al registro.")}</span>
       {sinCerrar > 0 && <p className="rounded-xl bg-pause-soft p-2 text-sm text-pause">{tf(sinCerrar === 1 ? "Tienes {n} jornada sin cerrar este mes: cuenta 0 h. Pide la corrección antes de cerrar si quieres que se compute." : "Tienes {n} jornadas sin cerrar este mes: cuentan 0 h. Pide las correcciones antes de cerrar si quieres que se computen.", { n: sinCerrar })}</p>}

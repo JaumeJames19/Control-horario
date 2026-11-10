@@ -58,13 +58,13 @@ export function Kiosco() {
     }
   }
 
-  const field = "campo rounded-2xl px-5 py-4 text-2xl";
+  const field = "campo rounded-lg px-5 py-4 text-2xl";
   return (
     <div className="min-h-screen">
       <Marca grande ancho="max-w-md"><Idioma /></Marca>
       <main className="mx-auto flex max-w-md flex-col gap-5 px-5 py-10">
         {!estado ? (
-          <form onSubmit={(e) => { e.preventDefault(); void enviar(); }} className="flex flex-col gap-4 rounded-3xl bg-card p-6 shadow-card">
+          <form onSubmit={(e) => { e.preventDefault(); void enviar(); }} className="flex flex-col gap-4 rounded-xl bg-card p-6 shadow-card">
             <h1 className="font-display text-4xl font-bold tracking-tight">{t("Fichar")}</h1>
             <label className="flex flex-col gap-1.5 text-lg font-medium">{t("Usuario")}
               {/* Al volver al formulario (tras fichar o cancelar) el foco queda listo para el siguiente trabajador. */}
@@ -73,25 +73,25 @@ export function Kiosco() {
             <label className="flex flex-col gap-1.5 text-lg font-medium">{t("PIN")}
               <input className={`${field} num tracking-[0.4em]`} inputMode="numeric" type="password" autoComplete="off" maxLength={6} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} />
             </label>
-            {msg && <p role="alert" className="rounded-2xl bg-stop-soft px-4 py-3 text-lg font-medium text-destructive">{msg}</p>}
-            <Button disabled={busy || !usuario || pin.length !== 6} className="h-auto rounded-2xl py-4 text-2xl">{busy ? "…" : t("Continuar")}</Button>
+            {msg && <p role="alert" className="rounded-lg bg-stop-soft px-4 py-3 text-lg font-medium text-destructive">{msg}</p>}
+            <Button disabled={busy || !usuario || pin.length !== 6} className="h-auto rounded-lg py-4 text-2xl">{busy ? "…" : t("Continuar")}</Button>
           </form>
         ) : (
           <div className="flex flex-col gap-4" onPointerDown={() => setActividad((n) => n + 1)} onKeyDown={() => setActividad((n) => n + 1)}>
             <h1 ref={estado.hecho ? undefined : (resultado as React.RefObject<HTMLHeadingElement>)} tabIndex={-1} className="font-display text-5xl font-bold tracking-tight outline-none">{estado.nombre}</h1>
             {estado.hecho ? (
-              <p ref={resultado as React.RefObject<HTMLParagraphElement>} role="status" tabIndex={-1} className="outline-none rounded-3xl bg-go-soft p-6 text-2xl font-semibold text-go ring-1 ring-go/30">{t(TIPOS[estado.hecho.tipo])} {t("registrada a las")} {hm(estado.hecho.at)}.</p>
+              <p ref={resultado as React.RefObject<HTMLParagraphElement>} role="status" tabIndex={-1} className="outline-none rounded-xl bg-go-soft p-6 text-2xl font-semibold text-go ring-1 ring-go/30">{t(TIPOS[estado.hecho.tipo])} {t("registrada a las")} {hm(estado.hecho.at)}.</p>
             ) : estado.olvidada ? (
-              <p className="rounded-3xl bg-pause-soft p-6 text-lg text-pause ring-1 ring-pause/30">{t(ERRORES["OLVIDADA"] ?? "")}</p>
+              <p className="rounded-xl bg-pause-soft p-6 text-lg text-pause ring-1 ring-pause/30">{t(ERRORES["OLVIDADA"] ?? "")}</p>
             ) : (
               estado.opciones.map((tp) => (
                 <button key={tp} type="button" disabled={busy} onClick={() => enviar(tp)}
-                  className={`slashes min-h-28 rounded-[28px] ${BOTON[tp]} font-display text-5xl font-bold tracking-tight text-on-signal shadow-pop transition-transform hover:brightness-105 active:scale-[.98] disabled:opacity-60`}>
+                  className={`slashes min-h-28 rounded-2xl ${BOTON[tp]} font-display text-5xl font-bold tracking-tight text-on-signal shadow-pop transition-transform hover:brightness-105 active:scale-[.98] disabled:opacity-60`}>
                   {tp === "reanudar" ? t("Volver al trabajo") : t(TIPOS[tp])}
                 </button>
               ))
             )}
-            <Button variant="outline" className="h-auto rounded-2xl py-3.5 text-lg" onClick={limpiar}>{estado.hecho ? t("Listo") : t("Cancelar")}</Button>
+            <Button variant="outline" className="h-auto rounded-lg py-3.5 text-lg" onClick={limpiar}>{estado.hecho ? t("Listo") : t("Cancelar")}</Button>
           </div>
         )}
       </main>

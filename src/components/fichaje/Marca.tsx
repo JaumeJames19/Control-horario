@@ -12,7 +12,7 @@ export function Marca({ children, grande = false, ancho = "max-w-[560px]" }: { c
       <div className={`mx-auto flex ${ancho} items-center justify-between gap-3 ${grande ? "px-5 py-7" : "px-4 py-2.5"}`}>
         <div className="min-w-0">
           <span className={`block font-display font-bold leading-none text-brand ${grande ? "text-5xl" : "text-2xl"}`}>{EMPRESA}</span>
-          {grande && <span className="mt-2 block text-sm font-medium uppercase tracking-[0.18em] text-muted-foreground">{t("Registro de jornada")}</span>}
+          {grande && <span className="mt-1.5 block text-base font-medium text-muted-foreground">{t("Registro de jornada")}</span>}
         </div>
         {children}
       </div>

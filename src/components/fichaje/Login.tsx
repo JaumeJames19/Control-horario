@@ -45,7 +45,7 @@ export function Login() {
           <h1 className="font-display text-4xl font-bold tracking-tight">{t("Ficha tu jornada")}</h1>
           <p className="mt-1 text-muted-foreground">{t("Entra con tu usuario y tu PIN.")}</p>
         </div>
-        <form onSubmit={submit} className="flex flex-col gap-4 rounded-3xl bg-card p-6 shadow-card">
+        <form onSubmit={submit} className="flex flex-col gap-4 rounded-xl bg-card p-6 shadow-card">
           <label className="flex flex-col gap-1.5 text-sm font-medium">{t("Usuario")}
             <input className={field} autoCapitalize="none" autoComplete="username" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
           </label>
@@ -54,7 +54,7 @@ export function Login() {
               autoComplete="current-password" value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} />
           </label>
           {err && <p role="alert" className="rounded-xl bg-stop-soft px-3 py-2 text-sm font-medium text-destructive">{err}</p>}
-          <Button disabled={busy} className="mt-1 h-auto rounded-2xl py-3.5 text-lg">{busy ? t("Entrando…") : t("Entrar")}</Button>
+          <Button disabled={busy} className="mt-1 h-auto rounded-lg py-3.5 text-lg">{busy ? t("Entrando…") : t("Entrar")}</Button>
         </form>
         <p className="text-sm text-muted-foreground">{t("Para obtener acceso o recuperar tu PIN, habla con el encargado.")}</p>
         <p aria-hidden className="mt-auto pt-6 text-center font-lema text-xl tracking-[0.12em] text-logo-grey">{t("Cada hora cuenta")}</p>

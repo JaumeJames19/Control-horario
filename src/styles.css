@@ -76,35 +76,35 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Sombras suaves: tarjetas que flotan sobre el fondo en vez de bordes duros. */
+/* Paneles planos con un filo fino, como un albarán sobre el mostrador; solo los botones de fichar se levantan. */
 @theme {
-  --shadow-card: 0 1px 2px rgb(32 33 36 / 0.05), 0 10px 30px -14px rgb(32 33 36 / 0.22);
+  --shadow-card: 0 0 0 1px rgb(32 33 36 / 0.09);
   --shadow-pop: 0 2px 4px rgb(32 33 36 / 0.08), 0 18px 36px -16px rgb(32 33 36 / 0.45);
 }
 
 :root {
   /* Marca: azul petróleo y gris sobre blanco; verde/ocre/rojo para entrada/pausa/salida. */
-  --radius: 1rem;
+  --radius: 0.625rem;                   /* esquinas contenidas: 10 px de base */
   --brand: oklch(0.47 0.1 215);         /* #00687E, azul petróleo de la marca */
   --brand-dark: oklch(0.39 0.085 215);
   --logo-grey: oklch(0.453 0.007 265);  /* #54565A, gris de la marca */
-  --background: oklch(0.968 0.003 80);  /* hormigón claro, más aire */
-  --foreground: oklch(0.27 0.006 260);  /* grafito */
+  --background: oklch(0.948 0.003 250);  /* hormigón claro, más aire */
+  --foreground: oklch(0.25 0.006 260);  /* grafito */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.25 0.004 250);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.25 0.004 250);
   --primary: oklch(0.25 0.004 250);
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.93 0.004 80);
+  --secondary: oklch(0.925 0.004 250);
   --secondary-foreground: oklch(0.25 0.004 250);
-  --muted: oklch(0.93 0.004 80);
+  --muted: oklch(0.925 0.004 250);
   --muted-foreground: oklch(0.48 0.008 80);
-  --accent: oklch(0.93 0.004 80);
+  --accent: oklch(0.925 0.004 250);
   --accent-foreground: oklch(0.25 0.004 250);
   --destructive: oklch(0.52 0.2 23);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.9 0.004 80);
+  --border: oklch(0.885 0.004 250);
   --input: oklch(0.66 0.008 80);        /* 3:1 sobre blanco: el campo se ve sin depender del foco */
   --ring: oklch(0.52 0.2 23);
   --go: oklch(0.5 0.12 155);
