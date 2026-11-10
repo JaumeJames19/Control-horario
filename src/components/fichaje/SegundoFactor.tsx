@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { t, useIdioma } from "@/lib/i18n";
+import { enfocarAlMontar } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Marca } from "./Marca";
@@ -46,7 +47,7 @@ export function SegundoFactor({ onDone }: { onDone: () => void }) {
     <div className="min-h-screen">
       <Marca />
       <main className="mx-auto flex max-w-sm flex-col gap-5 px-5 py-10">
-        <h1 className="font-display text-3xl font-bold">{t("Código de seguridad")}</h1>
+        <h1 ref={enfocarAlMontar} tabIndex={-1} className="outline-none font-display text-3xl font-bold">{t("Código de seguridad")}</h1>
         {qr ? (
           <>
             <p className="text-sm">{t("Como encargado, además del PIN necesitas un código que cambia cada 30 segundos. Escanea este QR con Google Authenticator, Microsoft Authenticator o la app de contraseñas del iPhone:")}</p>
