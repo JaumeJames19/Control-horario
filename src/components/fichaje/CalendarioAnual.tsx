@@ -5,7 +5,8 @@ import { ESTILO_MARCA as ESTILO, marcasDelAno, NOMBRE_MARCA as NOMBRE, notasFest
 const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 const LEYENDA: Marca[] = ["nacional", "autonomico", "local", "cierre", "vacaciones", "pendiente", "ausencia"];
 /** Forma además del color (para quien no distingue el rojo del verde): días de la empresa cuadrados, los del trabajador redondos. */
-const FORMA: Record<Marca, string> = { nacional: "rounded-sm", autonomico: "rounded-sm", local: "rounded-sm", cierre: "rounded-sm", vacaciones: "rounded-full", pendiente: "rounded-full", ausencia: "rounded-full" };
+// Esquina fija: con --radius de 1rem, rounded-sm (12 px) deja redonda una casilla de 21 px.
+const FORMA: Record<Marca, string> = { nacional: "rounded-[3px]", autonomico: "rounded-[3px]", local: "rounded-[3px]", cierre: "rounded-[3px]", vacaciones: "rounded-full", pendiente: "rounded-full", ausencia: "rounded-full" };
 
 /**
  * Los doce meses del año de un vistazo: festivos (nacional, autonómico y local, con los locales provisionales
