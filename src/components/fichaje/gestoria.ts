@@ -1,8 +1,7 @@
 import { TIPOS, hm } from "@/lib/fichaje";
-import { supabase } from "@/integrations/supabase/client";
 import { computoAnual, resumenMes, type Cierre, type Config } from "@/lib/jornada";
 import { descargarXlsx } from "@/lib/xlsx";
-import { ausDe, type AusenciaRow, type CierreRow, type Fila, type Perfil } from "./data";
+import { ausDe, loadSolicitudes, type AusenciaRow, type CierreRow, type Fila, type Perfil } from "./data";
 
 const h = (ms: number) => Math.round((ms / 3600000) * 100) / 100;
 
@@ -38,18 +37,15 @@ const ESTADO_AUS: Record<string, string> = { pendiente: "Pendiente", aprobada: "
  */
 export async function exportarHistorico(filas: Fila[], perfiles: Perfil[], ausencias: AusenciaRow[], cierres: CierreRow[]) {
   const nombre = (id: string) => perfiles.find((p) => p.id === id)?.nombre ?? id;
-  const [s, d] = await Promise.all([
-    supabase.from("solicitudes_correccion").select("*").order("solicitada_at"),
-    supabase.from("decisiones_correccion").select("*"),
-  ]);
+  const solicitudes = (await loadSolicitudes()).reverse(); // de la más antigua a la más nueva
   const fichajes: (string | number | null)[][] = [["Trabajador", "Usuario", "Día de la jornada", "Tipo", "Fecha y hora", "Modalidad", "Corregido", "Fecha y hora original", "Id"]];
   for (const f of [...filas].sort((a, b) => a.user_id.localeCompare(b.user_id) || a.at.localeCompare(b.at))) {
     const p = perfiles.find((x) => x.id === f.user_id);
     fichajes.push([p?.nombre ?? "", p?.username ?? "", f.dia, TIPOS[f.tipo], new Date(f.at).toLocaleString("es-ES", { timeZone: "Europe/Madrid" }), f.modalidad === "distancia" ? "A distancia" : "Presencial", f.editado ? "Sí" : "", f.original_at ? new Date(f.original_at).toLocaleString("es-ES", { timeZone: "Europe/Madrid" }) : "", f.id]);
   }
   const correcciones: (string | number | null)[][] = [["Trabajador", "Solicitada por", "Solicitada el", "Motivo", "Propuesta", "Decisión", "Decidida por", "Decidida el", "Motivo de la decisión"]];
-  for (const x of s.data ?? []) {
-    const dec = (d.data ?? []).find((y) => y.solicitud_id === x.id);
+  for (const x of solicitudes) {
+    const dec = x.decisiones_correccion;
     const prop = (x.propuesta as { original_id: string | null; tipo: string; at: string | null; anular: boolean }[]).map((q) => q.anular ? `anular ${q.original_id}` : `${q.tipo} ${q.at ? new Date(q.at).toLocaleString("es-ES", { timeZone: "Europe/Madrid" }) : ""}${q.original_id ? ` (sustituye ${q.original_id})` : " (omitido)"}`).join("; ");
     correcciones.push([nombre(x.user_id), nombre(x.solicitada_por), new Date(x.solicitada_at).toLocaleString("es-ES", { timeZone: "Europe/Madrid" }), x.motivo, prop, dec ? (dec.aprobada ? "Aprobada" : "Rechazada") : "Pendiente", dec ? nombre(dec.decidida_por) : "", dec ? new Date(dec.decidida_at).toLocaleString("es-ES", { timeZone: "Europe/Madrid" }) : "", dec?.motivo ?? ""]);
   }

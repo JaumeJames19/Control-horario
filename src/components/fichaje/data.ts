@@ -78,5 +78,16 @@ export async function loadCalendario() {
   return { cfg, festivos: (f.data ?? []) as Festivo[], ausencias: (a.data ?? []) as AusenciaRow[], cierres: (k.data ?? []) as CierreRow[], cierresEmpresa: (e.data ?? []) as CierreEmpresaRow[], periodos: (h.data ?? []) as PeriodoRow[], ajustes: (v.data ?? []) as AjusteRow[] };
 }
 
+export type SolicitudRow = Database["public"]["Tables"]["solicitudes_correccion"]["Row"] & { decisiones_correccion: Database["public"]["Tables"]["decisiones_correccion"]["Row"] | null };
+
+/** Solicitudes de corrección (las más nuevas primero) con su decisión en la misma fila; sin decisión = pendiente. */
+export function loadSolicitudes(userId?: string) {
+  return todas<SolicitudRow>((a, b) => {
+    const q = supabase.from("solicitudes_correccion").select("*, decisiones_correccion(*)").order("solicitada_at", { ascending: false }).order("id");
+    return (userId ? q.eq("user_id", userId) : q).range(a, b);
+  });
+}
+export const pendiente = (s: SolicitudRow) => !s.decisiones_correccion;
+
 /** Ausencias de un trabajador a efectos de cálculo: las suyas más los cierres de empresa, que son vacaciones para todos. */
 export const ausDe = (aus: AusenciaRow[], userId: string, cierres: Cierre[] = []): Ausencia[] => [...aus.filter((a) => a.user_id === userId), ...cierresComoAusencias(cierres)];

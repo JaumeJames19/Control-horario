@@ -6,23 +6,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { TIPOS, localInput, type Tipo } from "@/lib/fichaje";
-import type { Database } from "@/integrations/supabase/types";
-import type { Perfil } from "./data";
+import { loadSolicitudes, pendiente, type Perfil, type SolicitudRow } from "./data";
 import { decisionReason, mensajeCorreccion } from "@/lib/correction";
-type Request = Database["public"]["Tables"]["solicitudes_correccion"]["Row"];
-type Decision = Database["public"]["Tables"]["decisiones_correccion"]["Row"];
 export function Requests({ admin, perfiles, revision, onSaved }: { admin: boolean; perfiles: Perfil[]; revision: number; onSaved: () => void }) {
-  const [requests, setRequests] = useState<Request[]>([]);
-  const [decisions, setDecisions] = useState<Decision[]>([]);
+  const [requests, setRequests] = useState<SolicitudRow[]>([]);
   const [reason, setReason] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [pendingOnly, setPendingOnly] = useState(true);
   const avisarA = useServerFn(avisarTrabajador);
   useIdioma();
   const load = useCallback(async () => {
-    const [s, d] = await Promise.all([supabase.from("solicitudes_correccion").select("*").order("solicitada_at", { ascending: false }), supabase.from("decisiones_correccion").select("*")]);
-    if (s.error || d.error) { toast.error(t("No se pudieron cargar las solicitudes.")); return; }
-    setRequests(s.data ?? []); setDecisions(d.data ?? []);
+    try { setRequests(await loadSolicitudes()); } catch { toast.error(t("No se pudieron cargar las solicitudes.")); }
   }, []);
   useEffect(() => { void load(); }, [load, revision]);
   async function decide(id: string, approve: boolean) {
@@ -38,7 +32,7 @@ export function Requests({ admin, perfiles, revision, onSaved }: { admin: boolea
   return <section className="flex flex-col gap-3"><h2 className="font-display text-lg font-bold uppercase">{t("Solicitudes de corrección")}</h2>
     <div className="flex gap-2"><Button variant={pendingOnly ? "default" : "outline"} onClick={() => setPendingOnly(true)}>{t("Pendientes")}</Button><Button variant={!pendingOnly ? "default" : "outline"} onClick={() => setPendingOnly(false)}>{t("Todas")}</Button></div>
     {!requests.length && <p className="text-sm text-muted-foreground">{t("Sin solicitudes.")}</p>}
-    {requests.filter((s) => !pendingOnly || !decisions.some((d) => d.solicitud_id === s.id)).map((s) => { const d = decisions.find((x) => x.solicitud_id === s.id); const proposal = s.propuesta as { original_id: string | null; tipo: Tipo; at: string | null; anular: boolean }[];
+    {requests.filter((s) => !pendingOnly || pendiente(s)).map((s) => { const d = s.decisiones_correccion; const proposal = s.propuesta as { original_id: string | null; tipo: Tipo; at: string | null; anular: boolean }[];
       return <article key={s.id} className="flex flex-col gap-2 rounded-2xl bg-card p-4 shadow-card">
         <b>{perfiles.find((p) => p.id === s.user_id)?.nombre ?? t("Mi jornada")} · {d ? d.aprobada ? t("Aprobada") : t("Rechazada") : t("Pendiente")}</b>
         <p className="text-sm">{s.motivo}</p><p className="text-xs text-muted-foreground">{t("Solicitada por")} {perfiles.find((p) => p.id === s.solicitada_por)?.nombre ?? s.solicitada_por} · {localInput(s.solicitada_at).replace("T", " ")}</p>

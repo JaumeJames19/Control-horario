@@ -2,6 +2,7 @@
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { avisos, cierresComoAusencias, madrid, type Ausencia, type Config, type FilaDia } from "./jornada";
 import { encargados, notificar } from "./push.server";
+import { todas } from "./paginar";
 
 async function huella(s: string) {
   const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
@@ -42,13 +43,12 @@ export async function recordatorios(now = Date.now()) {
     const textos = avisos(now, (filas ?? []) as FilaDia[], cfg, festivos, aus);
     enviados += await enviarNuevos(t.id, textos, hoy, "Recordatorio de fichaje");
   }
-  const [s, d, pa] = await Promise.all([
-    supabaseAdmin.from("solicitudes_correccion").select("id"),
-    supabaseAdmin.from("decisiones_correccion").select("solicitud_id"),
-    supabaseAdmin.from("ausencias").select("id").eq("estado", "pendiente"),
+  // Cada solicitud trae su decisión (sin decisión = pendiente), por páginas: Supabase corta a 1.000 filas.
+  const [s, pa] = await Promise.all([
+    todas((x, y) => supabaseAdmin.from("solicitudes_correccion").select("id, decisiones_correccion(id)").order("id").range(x, y)),
+    supabaseAdmin.from("ausencias").select("id", { count: "exact", head: true }).eq("estado", "pendiente"),
   ]);
-  const decididas = new Set((d.data ?? []).map((x) => x.solicitud_id));
-  const pendientes = (s.data ?? []).filter((x) => !decididas.has(x.id)).length + (pa.data ?? []).length;
+  const pendientes = s.filter((x) => !x.decisiones_correccion).length + (pa.count ?? 0);
   if (pendientes > 0) {
     const texto = `Tienes ${pendientes} solicitud${pendientes === 1 ? "" : "es"} pendiente${pendientes === 1 ? "" : "s"} de revisar.`;
     for (const id of await encargados()) enviados += await enviarNuevos(id, [texto], hoy, "Solicitudes pendientes");
