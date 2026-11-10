@@ -54,7 +54,7 @@ export function CierreMes({ uid, mes, mesActual, cierres, filas, revision, onSav
       <span className="text-sm">{t("Si todo está bien, da tu conformidad. Si algo no cuadra, explícalo: quedará anotado junto al registro.")}</span>
       {sinCerrar > 0 && <p role="alert" className="rounded-xl bg-pause-soft p-2 text-sm text-pause">{tf(sinCerrar === 1 ? "Tienes {n} jornada sin cerrar este mes: cuenta 0 h. Pide la corrección antes de cerrar si quieres que se compute." : "Tienes {n} jornadas sin cerrar este mes: cuentan 0 h. Pide las correcciones antes de cerrar si quieres que se computen.", { n: sinCerrar })}</p>}
       {pendientes > 0 && <p role="alert" className="rounded-xl bg-pause-soft p-2 text-sm text-pause">{tf(pendientes === 1 ? "Tienes {n} solicitud de corrección pendiente de decidir. Si la apruebas el encargado después, las horas de este mes cambiarán." : "Tienes {n} solicitudes de corrección pendientes de decidir. Si las aprueba el encargado después, las horas de este mes cambiarán.", { n: pendientes })}</p>}
-      {discrepo && <textarea className="campo p-2" placeholder={t("¿Qué no es correcto?")} value={comentario} onChange={(e) => setComentario(e.target.value)} />}
+      {discrepo && <label className="flex flex-col gap-1 text-sm font-medium">{t("¿Qué no es correcto?")}<textarea className="campo p-2" value={comentario} onChange={(e) => setComentario(e.target.value)} /></label>}
       <div className="flex flex-wrap gap-2">
         {!discrepo && <Button disabled={busy} onClick={() => cerrar(true)}>{t("Estoy conforme")}</Button>}
         {!discrepo && <Button variant="outline" disabled={busy} onClick={() => setDiscrepo(true)}>{t("No estoy conforme")}</Button>}

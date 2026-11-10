@@ -257,9 +257,9 @@ export function FichajeApp({ uid }: { uid: string }) {
       </div>
     </Marca>
     <main className="mx-auto flex max-w-[560px] flex-col gap-5 px-4 pb-12 pt-5">
-      {tabs.length > 1 && <nav className="grid grid-flow-col auto-cols-fr gap-1 rounded-2xl bg-secondary p-1" role="tablist">
+      {tabs.length > 1 && <nav className="grid grid-flow-col auto-cols-fr gap-1 rounded-2xl bg-secondary p-1">
         {tabs.map((k) => (
-          <button type="button" key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
+          <button type="button" key={k} aria-current={tab === k ? "page" : undefined} onClick={() => setTab(k)}
             className={`rounded-xl py-2 text-[15px] font-semibold capitalize transition-all focus-visible:outline-2 focus-visible:outline-ring ${tab === k ? "bg-card text-foreground shadow-card" : "text-muted-foreground hover:text-foreground"}`}>{t(k)}</button>
         ))}
       </nav>}
@@ -333,7 +333,7 @@ export function FichajeApp({ uid }: { uid: string }) {
         <section className={card}>
           <div className="flex items-center justify-between gap-2">
             <h2 className={h}>{t("Registro de jornada")}</h2>
-            <input type="month" value={mes} max={thisMonth()} onChange={(e) => e.target.value && setMes(e.target.value)} className="campo w-auto px-2.5 py-1.5" />
+            <input type="month" aria-label={t("Mes")} value={mes} max={thisMonth()} onChange={(e) => e.target.value && setMes(e.target.value)} className="campo w-auto px-2.5 py-1.5" />
           </div>
           <p className="text-sm text-muted-foreground">{t("Acceso de solo lectura para la Inspección de Trabajo: fichajes efectivos con sus originales, correcciones, ausencias y conformidad mensual de cada trabajador. Se conserva 4 años.")}</p>
           <div className="flex flex-wrap gap-2">
@@ -368,7 +368,7 @@ export function FichajeApp({ uid }: { uid: string }) {
         <section className={card}>
           <div className="flex items-center justify-between gap-2">
             <h2 className={h}>{tab === "equipo" ? t("Equipo") : t("Mis jornadas")}</h2>
-            <input type="month" value={mes} max={thisMonth()} onChange={(e) => e.target.value && setMes(e.target.value)} className="campo w-auto px-2.5 py-1.5" />
+            <input type="month" aria-label={t("Mes")} value={mes} max={thisMonth()} onChange={(e) => e.target.value && setMes(e.target.value)} className="campo w-auto px-2.5 py-1.5" />
           </div>
           <div className="flex flex-wrap gap-2">
             {tab === "equipo"

@@ -44,8 +44,12 @@ export function CambiarPin({ nombre, voluntario = false, onDone, onCancel }: { n
         <p className="text-sm text-muted-foreground">{voluntario ? t("Elige un PIN nuevo de 6 números que solo sepas tú.") : <>{nombre ? `${nombre}, ${t("el")}` : t("El")} {t("PIN que te han dado es temporal. Pon uno nuevo que solo sepas tú.")}</>}</p>
       </div>
       <form onSubmit={submit} className="flex flex-col gap-3 rounded-3xl bg-card p-6 shadow-card">
-        <input className={field} placeholder={t("PIN nuevo")} inputMode="numeric" type="password" autoComplete="new-password" value={pin} onChange={(e) => setPin(solo(e.target.value))} />
-        <input className={field} placeholder={t("Repite el PIN")} inputMode="numeric" type="password" autoComplete="new-password" value={repetir} onChange={(e) => setRepetir(solo(e.target.value))} />
+        <label className="flex flex-col gap-1.5 text-sm font-medium">{t("PIN nuevo")}
+          <input className={field} inputMode="numeric" type="password" autoComplete="new-password" value={pin} onChange={(e) => setPin(solo(e.target.value))} />
+        </label>
+        <label className="flex flex-col gap-1.5 text-sm font-medium">{t("Repite el PIN")}
+          <input className={field} inputMode="numeric" type="password" autoComplete="new-password" value={repetir} onChange={(e) => setRepetir(solo(e.target.value))} />
+        </label>
         {err && <p role="alert" className="text-sm font-medium text-destructive">{err}</p>}
         <Button disabled={busy} className="mt-1 h-auto rounded-xl py-3 text-lg font-semibold">{busy ? "…" : t("Guardar PIN")}</Button>
         {onCancel ? <Button type="button" variant="outline" onClick={onCancel}>{t("Volver")}</Button> : <Button type="button" variant="outline" onClick={() => supabase.auth.signOut()}>{t("Salir")}</Button>}

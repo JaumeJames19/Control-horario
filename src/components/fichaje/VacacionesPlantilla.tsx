@@ -62,7 +62,7 @@ export function VacacionesPlantilla({ year, hoy, perfiles, cfg, festivos, cierre
               <tr>
                 <th scope="col" className="sticky left-0 z-10 bg-card pr-2 text-left font-semibold">{t("Trabajador")}</th>
                 {dias.map((d) => (
-                  <th key={d} scope="col" className={`num w-6 min-w-6 pb-1 font-normal ${dowDe(d) === 0 || dowDe(d) === 6 ? "text-muted-foreground/70" : "text-muted-foreground"} ${d === hoy ? "font-bold text-foreground" : ""}`}>
+                  <th key={d} scope="col" className={`num w-6 min-w-6 pb-1 font-normal ${dowDe(d) === 0 || dowDe(d) === 6 ? "text-muted-foreground" : "text-muted-foreground"} ${d === hoy ? "font-bold text-foreground" : ""}`}>
                     <span className="block">{t(LETRA[dowDe(d)] ?? "").slice(-1).toUpperCase()}</span>{Number(d.slice(-2))}
                   </th>
                 ))}
@@ -192,13 +192,13 @@ function HorasPlantilla({ year, mes, plantilla, cfg, festSet, cierres, suyas }: 
             <div key={p.id} className="grid grid-cols-[1fr_4.5rem_5rem] items-center gap-x-2 border-b py-1 text-right text-sm">
               <span className="truncate text-left">{p.nombre}</span>
               <span className="num">{h1(m.horas)} h</span>
-              <span className={`num ${exceso ? "font-semibold text-stop" : ""}`}>{h1(a.horas)} h</span>
+              <span className={`num ${exceso ? "font-semibold text-stop" : ""}`}>{exceso && <span aria-hidden>⚠ </span>}{h1(a.horas)} h{exceso && <span className="sr-only"> ({t("supera el máximo anual")})</span>}</span>
             </div>
           );
         })}
       </div>
       {plantilla.some((p) => horasLaborables(rango.ano[0], rango.ano[1], cfg, festSet, cierres, suyas(p.id)).horas > cfg.horas_anuales) && (
-        <p role="alert" className="rounded-xl bg-stop-soft p-2 text-sm text-stop">{tf("En rojo, quien supera el máximo anual del convenio ({n} h). El horario de apertura no puede ser la jornada de cada trabajador: habrá que repartirlo por turnos.", { n: h1(cfg.horas_anuales) })}</p>
+        <p role="alert" className="rounded-xl bg-stop-soft p-2 text-sm text-stop">{tf("En rojo y con ⚠, quien supera el máximo anual del convenio ({n} h). El horario de apertura no puede ser la jornada de cada trabajador: habrá que repartirlo por turnos.", { n: h1(cfg.horas_anuales) })}</p>
       )}
       <p className="text-xs text-muted-foreground">{t("Los sábados van por turnos: cuentan en el total de la empresa, pero aún no en las horas de cada trabajador.")}</p>
     </div>

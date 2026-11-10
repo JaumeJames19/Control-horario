@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { t, useIdioma } from "@/lib/i18n";
 import { useServerFn } from "@tanstack/react-start";
 import { fichaKiosco } from "@/lib/acceso.functions";
@@ -29,6 +29,9 @@ export function Kiosco() {
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
   const llamar = useServerFn(fichaKiosco);
+  // El formulario desaparece al identificarse: el foco va al resultado (o al nombre) para que el lector de pantalla lo lea.
+  const resultado = useRef<HTMLElement>(null);
+  useEffect(() => { if (estado) resultado.current?.focus(); }, [estado]);
   useIdioma();
 
   const limpiar = () => { setUsuario(""); setPin(""); setEstado(null); };
@@ -60,16 +63,21 @@ export function Kiosco() {
         {!estado ? (
           <form onSubmit={(e) => { e.preventDefault(); void enviar(); }} className="flex flex-col gap-4 rounded-3xl bg-card p-6 shadow-card">
             <h1 className="font-display text-4xl font-bold tracking-tight">{t("Fichar")}</h1>
-            <input className={field} placeholder={t("Usuario")} autoCapitalize="none" autoComplete="off" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
-            <input className={`${field} num tracking-[0.4em]`} placeholder="PIN" inputMode="numeric" type="password" autoComplete="off" maxLength={6} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} />
+            <label className="flex flex-col gap-1.5 text-lg font-medium">{t("Usuario")}
+              {/* Al volver al formulario (tras fichar o cancelar) el foco queda listo para el siguiente trabajador. */}
+              <input autoFocus className={field} autoCapitalize="none" autoComplete="off" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
+            </label>
+            <label className="flex flex-col gap-1.5 text-lg font-medium">{t("PIN")}
+              <input className={`${field} num tracking-[0.4em]`} inputMode="numeric" type="password" autoComplete="off" maxLength={6} value={pin} onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))} />
+            </label>
             {msg && <p role="alert" className="rounded-2xl bg-stop-soft px-4 py-3 text-lg font-medium text-destructive">{msg}</p>}
             <Button disabled={busy || !usuario || pin.length !== 6} className="h-auto rounded-2xl py-4 text-2xl">{busy ? "…" : t("Continuar")}</Button>
           </form>
         ) : (
           <div className="flex flex-col gap-4">
-            <h1 className="font-display text-5xl font-bold tracking-tight">{estado.nombre}</h1>
+            <h1 ref={estado.hecho ? undefined : (resultado as React.RefObject<HTMLHeadingElement>)} tabIndex={-1} className="font-display text-5xl font-bold tracking-tight outline-none">{estado.nombre}</h1>
             {estado.hecho ? (
-              <p className="rounded-3xl bg-go-soft p-6 text-2xl font-semibold text-go ring-1 ring-go/30">{t(TIPOS[estado.hecho.tipo])} {t("registrada a las")} {hm(estado.hecho.at)}.</p>
+              <p ref={resultado as React.RefObject<HTMLParagraphElement>} role="status" tabIndex={-1} className="outline-none rounded-3xl bg-go-soft p-6 text-2xl font-semibold text-go ring-1 ring-go/30">{t(TIPOS[estado.hecho.tipo])} {t("registrada a las")} {hm(estado.hecho.at)}.</p>
             ) : estado.olvidada ? (
               <p className="rounded-3xl bg-pause-soft p-6 text-lg text-pause ring-1 ring-pause/30">{t(ERRORES["OLVIDADA"] ?? "")}</p>
             ) : (

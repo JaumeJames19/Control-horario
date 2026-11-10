@@ -4,6 +4,8 @@ import { ESTILO_MARCA as ESTILO, marcasDelAno, NOMBRE_MARCA as NOMBRE, notasFest
 
 const MESES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 const LEYENDA: Marca[] = ["nacional", "autonomico", "local", "cierre", "vacaciones", "pendiente", "ausencia"];
+/** Forma además del color (para quien no distingue el rojo del verde): días de la empresa cuadrados, los del trabajador redondos. */
+const FORMA: Record<Marca, string> = { nacional: "rounded-sm", autonomico: "rounded-sm", local: "rounded-sm", cierre: "rounded-sm", vacaciones: "rounded-full", pendiente: "rounded-full", ausencia: "rounded-full" };
 
 /**
  * Los doce meses del año de un vistazo: festivos (nacional, autonómico y local, con los locales provisionales
@@ -38,8 +40,10 @@ export function CalendarioAnual({ year, festivos, cierres, ausencias, hoy, perio
                   const titulo = [d, fest?.nombre, marca ? t(NOMBRE[marca]) : "", sab ? `${t("Sábado de apertura")} ${sab.hora_entrada.slice(0, 5)}–${sab.hora_salida.slice(0, 5)}` : "", ...(fest ? notasFestivo(fest).map(t) : [])].filter(Boolean).join(" · ");
                   return (
                     <span key={d} title={titulo}
-                      className={`num relative flex aspect-square items-center justify-center rounded-md ${marca ? ESTILO[marca] : sab ? SABADO_APERTURA : finde ? "text-muted-foreground/70" : ""} ${fest?.provisional ? PROVISIONAL : ""} ${d === hoy ? "font-bold underline underline-offset-2" : ""}`}>
-                      {Number(d.slice(-2))}
+                      className={`num relative flex aspect-square items-center justify-center ${marca ? `${ESTILO[marca]} ${FORMA[marca]}` : `rounded-md ${sab ? SABADO_APERTURA : finde ? "text-muted-foreground" : ""}`} ${fest?.provisional ? PROVISIONAL : ""} ${d === hoy ? "font-bold underline underline-offset-2" : ""}`}>
+                      <span aria-hidden>{Number(d.slice(-2))}</span>
+                      {/* El title no se ve en el móvil ni lo leen bien los lectores de pantalla: el mismo texto, oculto. */}
+                      <span className="sr-only">{titulo}</span>
                       {fest && dowDe(d) === 6 && <i aria-hidden className="absolute right-0.5 top-0.5 h-1.5 w-1.5 rounded-full bg-on-signal" />}
                     </span>
                   );
@@ -50,7 +54,7 @@ export function CalendarioAnual({ year, festivos, cierres, ausencias, hoy, perio
         })}
       </div>
       <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
-        {LEYENDA.map((k) => <li key={k} className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 rounded-sm ${ESTILO[k]}`} />{t(NOMBRE[k])}</li>)}
+        {LEYENDA.map((k) => <li key={k} className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 ${ESTILO[k]} ${FORMA[k]}`} />{t(NOMBRE[k])}</li>)}
         {apertura.size > 0 && <li className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 rounded-sm ${SABADO_APERTURA}`} />{t("Sábado de apertura")}</li>}
         {hayProvisional && <li className="flex items-center gap-1.5"><i aria-hidden className={`inline-block h-3 w-3 rounded-sm ${PROVISIONAL}`} />{t("Local pendiente de confirmación oficial")}</li>}
         {haySabado && <li className="flex items-center gap-1.5"><i aria-hidden className="relative inline-block h-3 w-3 rounded-sm bg-brand"><i className="absolute right-0.5 top-0.5 h-1 w-1 rounded-full bg-on-signal" /></i>{t("Festivo en sábado: posible compensación")}</li>}
