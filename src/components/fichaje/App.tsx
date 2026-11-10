@@ -15,6 +15,7 @@ import { exportarGestoria, exportarHistorico } from "./gestoria";
 import { AvisosPush } from "./AvisosPush";
 import { Idioma } from "./Idioma";
 import { locale, t, useIdioma } from "@/lib/i18n";
+import { enfocarAlMontar } from "@/lib/utils";
 import { exportarPdf } from "./pdf";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -257,7 +258,7 @@ export function FichajeApp({ uid }: { uid: string }) {
       </div>
     </Marca>
     <main className="mx-auto flex max-w-[560px] flex-col gap-5 px-4 pb-12 pt-5">
-      <h1 className="sr-only">{t("Registro de jornada")}</h1>
+      <h1 id="titulo-app" ref={enfocarAlMontar} tabIndex={-1} className="sr-only">{t("Registro de jornada")}</h1>
       {tabs.length > 1 && <nav className="grid grid-flow-col auto-cols-fr gap-1 rounded-2xl bg-secondary p-1">
         {tabs.map((k) => (
           <button type="button" key={k} aria-current={tab === k ? "page" : undefined} onClick={() => setTab(k)}
@@ -437,7 +438,7 @@ export function FichajeApp({ uid }: { uid: string }) {
       {fichaje && (tab === "historial" || tab === "equipo") && <Requests admin={admin} perfiles={perfiles} revision={revision} onSaved={refresh} />}
       {tab === "equipo" && admin && <Ajustes cfg={cfg} festivos={festivos} cierres={cierresEmpresa} periodos={periodos} onSaved={refresh} />}
       {employee && <EmployeeDialog {...employee} onClose={() => setEmployee(null)} onSaved={() => { setEmployee(null); void cargarPerfiles(); }} />}
-      <Dialog open={privacy} onOpenChange={() => undefined}><DialogContent><DialogTitle>{t("Información sobre tus datos")}</DialogTitle><DialogDescription>{t("Registro de jornada obligatorio (art. 34.9 del Estatuto de los Trabajadores).")}</DialogDescription>
+      <Dialog open={privacy} onOpenChange={() => undefined}><DialogContent onCloseAutoFocus={(e) => { e.preventDefault(); document.getElementById("titulo-app")?.focus(); }}><DialogTitle>{t("Información sobre tus datos")}</DialogTitle><DialogDescription>{t("Registro de jornada obligatorio (art. 34.9 del Estatuto de los Trabajadores).")}</DialogDescription>
         <p className="text-sm">{t("Empresa Demo registra la hora de entrada, pausas y salida de cada jornada para cumplir la obligación legal de registro horario. No se recoge tu ubicación.")}</p>
         <p className="text-sm">{t("Los registros se conservan 4 años y están a disposición tuya, de tus representantes y de la Inspección de Trabajo. Solo tú y el encargado podéis consultarlos.")}</p>
         <p className="text-sm">{t("Puedes pedir a la empresa el acceso a tus datos o la rectificación de un fichaje erróneo (desde «Solicitar corrección»).")}</p>

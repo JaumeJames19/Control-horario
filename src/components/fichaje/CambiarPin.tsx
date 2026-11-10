@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { t, useIdioma } from "@/lib/i18n";
+import { enfocarAlMontar } from "@/lib/utils";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { cambiarMiPin } from "@/lib/pin.functions";
@@ -40,7 +41,7 @@ export function CambiarPin({ nombre, voluntario = false, onDone, onCancel }: { n
     <Marca />
     <main className="mx-auto flex max-w-sm flex-col gap-6 px-5 py-10">
       <div>
-        <h1 className="font-display text-3xl font-bold">{voluntario ? t("Cambiar mi PIN") : t("Elige tu PIN")}</h1>
+        <h1 ref={enfocarAlMontar} tabIndex={-1} className="outline-none font-display text-3xl font-bold">{voluntario ? t("Cambiar mi PIN") : t("Elige tu PIN")}</h1>
         <p className="text-sm text-muted-foreground">{voluntario ? t("Elige un PIN nuevo de 6 números que solo sepas tú.") : <>{nombre ? `${nombre}, ${t("el")}` : t("El")} {t("PIN que te han dado es temporal. Pon uno nuevo que solo sepas tú.")}</>}</p>
       </div>
       <form onSubmit={submit} className="flex flex-col gap-3 rounded-3xl bg-card p-6 shadow-card">
