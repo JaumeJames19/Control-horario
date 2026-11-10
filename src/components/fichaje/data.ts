@@ -17,10 +17,10 @@ export function monthRange(ym: string) {
 
 /** Fichajes efectivos (de un trabajador o de todos) desde el día indicado; sin `desde`, todo el histórico. */
 export async function loadAll(userId?: string, desde?: string) {
-  const args = { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) };
-  const filas = (await todas((a, b) => supabase.rpc("list_punches", args).range(a, b))) as unknown as Fila[];
-  // list_punches va ordenado; si alguien ficha entre dos páginas, la fila del borde puede llegar dos veces.
-  return [...new Map(filas.map((f) => [f.id, f])).values()];
+  // Una sola fila con el array: el límite de 1.000 filas de Supabase no la corta y no hace falta paginar.
+  const { data, error } = await supabase.rpc("list_punches_json", { ...(userId ? { _uid: userId } : {}), ...(desde ? { _desde: desde } : {}) });
+  if (error) throw error;
+  return (data ?? []) as unknown as Fila[];
 }
 
 export async function loadMonth(ym: string, userId?: string) {

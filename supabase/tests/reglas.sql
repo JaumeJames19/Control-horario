@@ -83,11 +83,17 @@ DO $$ BEGIN ASSERT (SELECT count(*) FROM fichajes) = 2, 'La Inspección debe ver
 -- list_punches sale ordenado por trabajador y hora (la app lo lee por páginas).
 DO $$ BEGIN ASSERT (SELECT array_agg(x->>'user_id' ORDER BY n) FROM list_punches() WITH ORDINALITY t(x, n)) = ARRAY['00000000-0000-0000-0000-00000000000a', '00000000-0000-0000-0000-00000000000d'], 'list_punches debe salir ordenado'; END $$;
 
+-- list_punches_json: los mismos fichajes, en el mismo orden, en una sola fila.
+DO $$ BEGIN ASSERT list_punches_json() = (SELECT jsonb_agg(x ORDER BY n) FROM list_punches() WITH ORDINALITY t(x, n)), 'list_punches_json debe dar lo mismo que list_punches'; END $$;
+DO $$ BEGIN ASSERT jsonb_array_length(list_punches_json('00000000-0000-0000-0000-00000000000a')) = 1, 'list_punches_json debe filtrar por trabajador'; END $$;
+
 -- 7. Un trabajador no ve los datos de otro.
 SELECT tests.como('00000000-0000-0000-0000-00000000000c');
 DO $$ BEGIN ASSERT (SELECT count(*) FROM fichajes) = 0, 'Sin aal2 la Inspección no ve nada ajeno'; END $$;
 
 RESET ROLE;
+
+DO $$ BEGIN ASSERT NOT has_function_privilege('anon', 'public.list_punches_json(uuid,date)', 'execute'), 'anon no debe poder leer fichajes'; END $$;
 
 -- 8. Límite de intentos: 5 fallos bloquean al usuario; 20 desde una IP la bloquean, salvo la IP de la tableta.
 DO $$ DECLARE i int; BEGIN

@@ -671,6 +671,10 @@ export type Database = {
         Args: { _desde?: string; _uid?: string }
         Returns: Json[]
       }
+      list_punches_json: {
+        Args: { _desde?: string; _uid?: string }
+        Returns: Json
+      }
       marcar_conductor: {
         Args: { _conductor: boolean; _id: string }
         Returns: undefined
