@@ -98,6 +98,7 @@ Requisitos: Node.js 22 o superior (o [Bun](https://bun.sh)) y un proyecto de Sup
    ```sh
    npm run dev      # servidor de desarrollo
    npm test         # tests
+   npm run test:sql # reglas de la base de datos (necesita Postgres local, variables PG*)
    npm run lint     # linter
    ```
 
