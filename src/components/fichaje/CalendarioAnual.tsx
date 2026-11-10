@@ -29,7 +29,7 @@ export function CalendarioAnual({ year, festivos, cierres, ausencias, hoy, perio
           const hueco = (dowDe(dias[0] ?? `${ym}-01`) + 6) % 7;
           return (
             <section key={ym} aria-label={`${t(nombre)} ${year}`}>
-              <h4 className="mb-1 text-sm font-semibold capitalize">{t(nombre)}</h4>
+              <h3 className="mb-1 text-sm font-semibold capitalize">{t(nombre)}</h3>
               <div className="grid grid-cols-7 gap-px text-center text-[11px] leading-none">
                 {["L", "M", "X", "J", "V", "S", "D"].map((d, j) => <span key={d + j} className="pb-1 text-muted-foreground">{t(d).slice(-1).toUpperCase()}</span>)}
                 {Array.from({ length: hueco }, (_, j) => <span key={"h" + j} />)}

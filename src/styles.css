@@ -152,5 +152,6 @@
   color: var(--color-foreground);
   outline: none;
   transition: border-color 150ms, box-shadow 150ms;
-  &:focus { border-color: var(--color-ring); box-shadow: 0 0 0 4px color-mix(in oklch, var(--color-ring) 18%, transparent); }
+  /* :focus-within también: en un campo de fecha, con el foco en el icono del calendario, :focus no se cumple. */
+  &:focus, &:focus-within { border-color: var(--color-ring); box-shadow: 0 0 0 4px color-mix(in oklch, var(--color-ring) 18%, transparent); }
 }
